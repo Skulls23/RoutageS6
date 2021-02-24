@@ -1,8 +1,12 @@
 package Routage.ihm;
 
 import Routage.Main;
+import Routage.ihm.panels.DialogAjoutLien;
 import Routage.ihm.panels.PanelGraphViewer;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.NodeFactory;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.graphicGraph.GraphicNode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,8 +16,9 @@ public class IHMGUI extends JFrame
     private final SingleGraph theGraph;
     private final Main ctrl;
 
-    private JButton ajoutPC;
-    private JButton ajoutRouteur;
+    private final JButton ajoutPC;
+    private final JButton ajoutRouteur;
+    private final JButton ajoutLien;
 
     public IHMGUI( Main ctrl, SingleGraph graph )
     {
@@ -26,21 +31,26 @@ public class IHMGUI extends JFrame
         this.ajoutPC.addActionListener(event ->
         {
             int num = this.theGraph.getNodeCount();
-            this.theGraph.addNode("PC" + num);
-            this.theGraph.getNode("PC" + num).setAttribute("label", "PC" + num);
+
+            this.theGraph.addNode("PC" + num).setAttribute("label", "PC" + num);
         });
 
         this.ajoutRouteur = new JButton("Ajouter Routeur");
         this.ajoutRouteur.addActionListener(event ->
         {
             int num = this.theGraph.getNodeCount();
-            this.theGraph.addNode("RO" + num);
-            this.theGraph.getNode("RO" + num).setAttribute("label", "RO" + num);
+            this.theGraph.addNode("RO" + num).setAttribute("label", "RO" + num);
         });
 
+        this.ajoutLien = new JButton("Ajout lien");
+        this.ajoutLien.addActionListener(event -> new DialogAjoutLien(this.theGraph));
+
         JPanel panelTMP = new JPanel();
+        panelTMP.setLayout(new BoxLayout(panelTMP, BoxLayout.Y_AXIS));
+
         panelTMP.add(this.ajoutPC);
         panelTMP.add(this.ajoutRouteur);
+        panelTMP.add(this.ajoutLien);
 
         this.add(panelTMP, BorderLayout.EAST);
 
