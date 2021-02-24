@@ -1,15 +1,20 @@
 package Routage;
 
+import Routage.ihm.IHMGUI;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.graph.*;
 
+import javax.swing.*;
+
 public class Main
 {
-    public static void main(String[] args)
-    {
-        System.setProperty("org.graphstream.ui", "swing");
+    private final IHMGUI ihm;
 
-        Graph graph = new SingleGraph("Tutorial 1");
+    private final SingleGraph graph;
+
+    public Main()
+    {
+        this.graph = new SingleGraph("Graph1");
 
         graph.addNode("A");
         graph.addNode("B");
@@ -18,7 +23,13 @@ public class Main
         graph.addEdge("BC", "B", "C");
         graph.addEdge("CA", "C", "A");
 
-        graph.display(true);
+        this.ihm = new IHMGUI(this, graph);
+    }
 
+    public static void main(String[] args)
+    {
+        System.setProperty("org.graphstream.ui", "swing");
+
+        SwingUtilities.invokeLater(Main::new);
     }
 }
