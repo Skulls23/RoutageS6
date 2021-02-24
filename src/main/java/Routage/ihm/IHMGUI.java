@@ -5,6 +5,7 @@ import Routage.ihm.panels.PanelGraphViewer;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class IHMGUI extends JFrame
 {
@@ -16,7 +17,7 @@ public class IHMGUI extends JFrame
         this.ctrl     = ctrl;
         this.theGraph = graph;
 
-        this.add(new PanelGraphViewer(graph));
+        this.add(new PanelGraphViewer(graph), BorderLayout.CENTER);
 
         this.pack();
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
