@@ -34,7 +34,7 @@ public class IHMGUI extends JFrame
         this.ajoutPC = new JButton("Ajouter PC");
         this.ajoutPC.addActionListener(event ->
         {
-            int num = this.theGraph.getNodeCount();
+            int num = this.getNodeCountFor(true) + 1;
 
             this.theGraph.addNode("PC" + num).setAttribute("label", "PC" + num);
         });
@@ -42,7 +42,7 @@ public class IHMGUI extends JFrame
         this.ajoutRouteur = new JButton("Ajouter Routeur");
         this.ajoutRouteur.addActionListener(event ->
         {
-            int num = this.theGraph.getNodeCount();
+            int num = this.getNodeCountFor(false) + 1;
             this.theGraph.addNode("RO" + num).setAttribute("label", "RO" + num);
         });
 
@@ -62,5 +62,16 @@ public class IHMGUI extends JFrame
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
+    }
+
+    public int getNodeCountFor( boolean isPC )
+    {
+        int cpt = 0;
+
+        for (int i = 0; i < this.theGraph.getNodeCount(); i++)
+            if( this.theGraph.getNode(i).getId().contains(isPC ? "PC" : "RO") )
+                cpt++;
+
+        return cpt;
     }
 }

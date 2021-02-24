@@ -11,6 +11,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DialogAjoutLien extends JDialog
 {
@@ -31,8 +32,11 @@ public class DialogAjoutLien extends JDialog
         for (int i = 0; i < this.graph.getNodeCount(); i++)
             allNodeId.add(this.graph.getNode(i).getId());
 
-        this.depart      = new JComboBox<>(allNodeId.toArray(new String[0]));
-        this.destination = new JComboBox<>(allNodeId.toArray(new String[0]));
+        String[] arrays = allNodeId.toArray(new String[0]);
+        Arrays.sort(arrays);
+
+        this.depart      = new JComboBox<>(arrays);
+        this.destination = new JComboBox<>(arrays);
         this.valider     = new JButton("Valider");
         this.cout        = new JTextField();
 
@@ -45,7 +49,7 @@ public class DialogAjoutLien extends JDialog
             String des = this.destination.getSelectedItem() == null ? "" : this.destination.getSelectedItem().toString();
             int cout   = Integer.parseInt(this.cout.getText().isEmpty() ? "0" : this.cout.getText());
 
-            if( dep.contains("PC") || des.contains("PC") ) // ne devrai pas arriver si ihm bien faite
+            if( cout != 0 && (dep.contains("PC") || des.contains("PC")) ) // ne devrai pas arriver si ihm bien faite
                 cout = 0;
 
             if( dep.isEmpty() || des.isEmpty() || dep.equals(des) || this.graph.getEdge(dep+des) != null || this.graph.getEdge(des+dep) != null )
