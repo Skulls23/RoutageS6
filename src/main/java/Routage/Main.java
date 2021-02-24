@@ -34,11 +34,10 @@ public class Main
         graph.addEdge("EC", "E", "C").setAttribute("length", 3);
         graph.addEdge("ED", "E", "D").setAttribute("length", 1);
 
-        Dijkstra dijkstra = new Dijkstra(Element.EDGE, null, "length");
-        dijkstra.init(graph);
-        dijkstra.setSource(graph.getNode("A"));
-        dijkstra.compute();
-
+        for(int i=0; i<graph.getEdgeCount(); i++)
+        {
+            graph.getEdge(i).setAttribute("label", graph.getEdge(i).getAttribute("length"));
+        }
         Metier.getPlusCourtCheminGraphique(graph, "A", "F");
 
         this.ihm = new IHMGUI(this, graph);

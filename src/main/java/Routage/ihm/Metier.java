@@ -21,9 +21,7 @@ public class Metier
     {
         Dijkstra dijkstra = Metier.setupDijkstra(graph, pointDebut);
         for (Node node : dijkstra.getPathNodes(graph.getNode(pointFin)))
-            node.setAttribute("ui.style", "fill-color: blue;");
-        for (Edge edge : dijkstra.getTreeEdges())
-            edge.setAttribute("ui.style", "fill-color: red;");
+            node.setAttribute("ui.style", "fill-color: green;");
     }
 
     public static String getPlusCourtCheminTextuelEtGraphique(Graph graph, String pointDebut, String pointFin)
