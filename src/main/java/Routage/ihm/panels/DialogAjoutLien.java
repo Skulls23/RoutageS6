@@ -48,13 +48,13 @@ public class DialogAjoutLien extends JDialog
             if( dep.contains("PC") || des.contains("PC") ) // ne devrai pas arriver si ihm bien faite
                 cout = 0;
 
-            if( dep.isEmpty() || des.isEmpty() || dep.equals(des) || this.graph.getEdge(dep+des) != null )
+            if( dep.isEmpty() || des.isEmpty() || dep.equals(des) || this.graph.getEdge(dep+des) != null || this.graph.getEdge(des+dep) != null )
             {
                 Toolkit.getDefaultToolkit().beep();
                 return;
             }
 
-            Edge edge = this.graph.addEdge( dep+des, dep, des, true);
+            Edge edge = this.graph.addEdge( dep+des, dep, des, false);
 
             if( cout > 0 ) edge.setAttribute("label", String.valueOf(cout));
 
@@ -103,6 +103,7 @@ public class DialogAjoutLien extends JDialog
 
         this.cout.setVisible(false);
 
+        this.setModal(true);
         this.setVisible(true);
     }
 

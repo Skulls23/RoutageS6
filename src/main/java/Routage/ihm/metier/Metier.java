@@ -1,4 +1,4 @@
-package Routage.metier;
+package Routage.ihm.metier;
 
 import org.graphstream.algorithm.Dijkstra;
 import org.graphstream.graph.Graph;

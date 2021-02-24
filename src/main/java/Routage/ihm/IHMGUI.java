@@ -7,6 +7,8 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.NodeFactory;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.graphicGraph.GraphicNode;
+import org.graphstream.ui.spriteManager.Sprite;
+import org.graphstream.ui.spriteManager.SpriteManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +28,8 @@ public class IHMGUI extends JFrame
         this.theGraph = graph;
 
         this.add(new PanelGraphViewer(graph), BorderLayout.CENTER);
+
+        SpriteManager manager = new SpriteManager(this.theGraph);
 
         this.ajoutPC = new JButton("Ajouter PC");
         this.ajoutPC.addActionListener(event ->
