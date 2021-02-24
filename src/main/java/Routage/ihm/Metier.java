@@ -11,13 +11,9 @@ https://javadoc.io/doc/org.graphstream
  */
 public class Metier
 {
-    public static String getPlusCourtCheminNomsNoeud(Graph graph, String pointDebut, String pointFin)
+    public static String getPlusCourtCheminTextuel(Graph graph, String pointDebut, String pointFin)
     {
-        Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "length");
-        dijkstra.init(graph);
-        dijkstra.setSource(graph.getNode(pointDebut));
-        dijkstra.compute();
-
+        Dijkstra dijkstra = Metier.setupDijkstra(graph, pointDebut);
         return dijkstra.getPath(graph.getNode(pointFin)) + " " + dijkstra.getPathLength(graph.getNode(pointFin));
     }
 
@@ -28,6 +24,12 @@ public class Metier
             node.setAttribute("ui.style", "fill-color: blue;");
         for (Edge edge : dijkstra.getTreeEdges())
             edge.setAttribute("ui.style", "fill-color: red;");
+    }
+
+    public static String getPlusCourtCheminTextuelEtGraphique(Graph graph, String pointDebut, String pointFin)
+    {
+        Metier.getPlusCourtCheminGraphique(graph, pointDebut, pointFin);
+        return Metier.getPlusCourtCheminTextuel(graph, pointDebut, pointFin);
     }
 
     private static Dijkstra setupDijkstra(Graph graph, String pointDebut)
