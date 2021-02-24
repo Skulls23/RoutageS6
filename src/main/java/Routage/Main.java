@@ -1,12 +1,7 @@
 package Routage;
 
 import Routage.ihm.IHMGUI;
-import Routage.ihm.Metier;
-import org.graphstream.algorithm.Dijkstra;
-import org.graphstream.algorithm.Dijkstra.Element;
-import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.graph.*;
 
 import javax.swing.*;
 
@@ -20,7 +15,7 @@ public class Main
     {
         this.graph = new SingleGraph("Graph1");
 
-        graph.addNode("A");
+        /*graph.addNode("A");
         graph.addNode("B");
         graph.addNode("C");
         graph.addNode("D");
@@ -38,7 +33,7 @@ public class Main
         {
             graph.getEdge(i).setAttribute("label", graph.getEdge(i).getAttribute("length"));
         }
-        Metier.getPlusCourtCheminGraphique(graph, "A", "F");
+        Metier.getPlusCourtCheminGraphique(graph, "A", "F");*/
 
         this.ihm = new IHMGUI(this, graph);
     }

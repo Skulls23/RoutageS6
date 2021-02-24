@@ -1,7 +1,6 @@
-package Routage.ihm;
+package Routage.metier;
 
 import org.graphstream.algorithm.Dijkstra;
-import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 
