@@ -1,6 +1,7 @@
 package Routage.ihm;
 
 import Routage.Main;
+import Routage.ihm.panels.PanelTableRoutage;
 import Routage.metier.Metier;
 import Routage.ihm.panels.DialogAjoutLien;
 import Routage.ihm.panels.PanelGraphViewer;
@@ -9,6 +10,9 @@ import org.graphstream.ui.spriteManager.SpriteManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class IHMGUI extends JFrame
 {
@@ -19,6 +23,7 @@ public class IHMGUI extends JFrame
     private final JButton ajoutRouteur;
     private final JButton ajoutLien;
     private final JButton afficherTableRoutage;
+    private final PanelTableRoutage panelRoutage;
 
     public IHMGUI( Main ctrl, SingleGraph graph )
     {
@@ -27,13 +32,13 @@ public class IHMGUI extends JFrame
 
         this.add(new PanelGraphViewer(graph), BorderLayout.CENTER);
 
-        SpriteManager manager = new SpriteManager(this.theGraph);
+        this.panelRoutage = new PanelTableRoutage();
+        this.add(this.panelRoutage, BorderLayout.SOUTH);
 
         this.ajoutPC = new JButton("Ajouter un PC");
         this.ajoutPC.addActionListener(event ->
         {
             int num = this.getNodeCountFor(true) + 1;
-
             this.theGraph.addNode("PC" + num).setAttribute("label", "PC" + num);
         });
 
@@ -48,7 +53,7 @@ public class IHMGUI extends JFrame
         this.ajoutLien.addActionListener(event -> new DialogAjoutLien(this.theGraph));
 
         this.afficherTableRoutage = new JButton("Afficher la table de routage");
-        this.afficherTableRoutage.addActionListener(event -> Metier.getTableRoutage(theGraph));
+        this.afficherTableRoutage.addActionListener(event -> this.panelRoutage.setHashMapSites(Metier.getTableRoutage(theGraph)));
 
         JPanel panelTMP = new JPanel();
         panelTMP.setLayout(new BoxLayout(panelTMP, BoxLayout.Y_AXIS));

@@ -14,7 +14,7 @@ public class PanelGraphViewer extends JPanel
     {
         this.setLayout( new GridLayout() );
 
-        Viewer viewer = new SwingViewer(graph, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
+        Viewer viewer = new SwingViewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         viewer.enableAutoLayout();
 
         ViewPanel viewPanel = (ViewPanel) viewer.addDefaultView(false);
