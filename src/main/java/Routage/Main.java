@@ -15,7 +15,7 @@ public class Main
     {
         this.graph = new SingleGraph("Graph1");
 
-        /*graph.addNode("A");
+        graph.addNode("A");
         graph.addNode("B");
         graph.addNode("C");
         graph.addNode("D");
@@ -29,11 +29,21 @@ public class Main
         graph.addEdge("EC", "E", "C").setAttribute("length", 3);
         graph.addEdge("ED", "E", "D").setAttribute("length", 1);
 
+
         for(int i=0; i<graph.getEdgeCount(); i++)
         {
             graph.getEdge(i).setAttribute("label", graph.getEdge(i).getAttribute("length"));
+            //graph.getEdge(i).setAttribute("ui.stylesheet", "url('ihm/style.css')"); //on peut opti via un fichier css, mais j'ai pas encore trouvé
+            //graph.getEdge(i).setAttribute("ui.class", ".texteVisible");
+            graph.getEdge(i).setAttribute("ui.style", "text-background-mode: plain; text-background-color: white;text-size: 15;");
         }
-        Metier.getPlusCourtCheminGraphique(graph, "A", "F");*/
+
+        for(int i=0; i<graph.getNodeCount(); i++)
+        {
+            graph.getNode(i).setAttribute("label", graph.getNode(i).getId());
+            graph.getNode(i).setAttribute("ui.style", "text-background-mode: plain; text-background-color: white;text-alignment: under;text-size: 15;");
+        }
+        //Metier.getPlusCourtCheminGraphique(graph, "A", "F");
 
         this.ihm = new IHMGUI(this, graph);
     }
