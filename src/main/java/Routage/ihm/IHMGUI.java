@@ -2,18 +2,12 @@ package Routage.ihm;
 
 import Routage.Main;
 import Routage.ihm.panels.PanelTableRoutage;
-import Routage.metier.Metier;
-import Routage.ihm.panels.DialogAjoutLien;
 import Routage.ihm.panels.PanelGraphViewer;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.spriteManager.SpriteManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class IHMGUI extends JFrame
 {
@@ -24,6 +18,7 @@ public class IHMGUI extends JFrame
     private final JButton ajoutRouteur;
     private final JButton ajoutLien;
     private final JButton afficherTableRoutage;
+    private final JButton calculChemin;
     private final PanelTableRoutage panelRoutage;
 
     public IHMGUI( Main ctrl, SingleGraph graph )
@@ -62,12 +57,16 @@ public class IHMGUI extends JFrame
         this.afficherTableRoutage = new JButton("Afficher la table de routage");
         this.afficherTableRoutage.addActionListener(event -> this.panelRoutage.setHashMapSites(this.ctrl.getTableRoutage()));
 
+        this.calculChemin = new JButton("Calcul chemin");
+        this.calculChemin.addActionListener(event -> new DialogCalculChemin(this.ctrl));
+
         JPanel panelTMP = new JPanel();
         panelTMP.setLayout(new BoxLayout(panelTMP, BoxLayout.Y_AXIS));
 
         panelTMP.add(this.ajoutPC);
         panelTMP.add(this.ajoutRouteur);
         panelTMP.add(this.ajoutLien);
+        panelTMP.add(this.calculChemin);
 
         JPanel panelDroite = new JPanel(new BorderLayout());
 

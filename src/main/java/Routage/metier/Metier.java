@@ -2,6 +2,7 @@ package Routage.metier;
 
 import Routage.Main;
 import org.graphstream.algorithm.Dijkstra;
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -33,9 +34,24 @@ public class Metier
 
     public void getPlusCourtCheminGraphique(String pointDebut, String pointFin)
     {
+        this.reinitialiserCouleurs();
+
         Dijkstra dijkstra = Metier.setupDijkstra(this.graph, pointDebut);
+
         for (Node node : dijkstra.getPathNodes(this.graph.getNode(pointFin)))
             node.setAttribute("ui.style", "fill-color: green;");
+
+        for (Edge edge : dijkstra.getPathEdges(this.graph.getNode(pointFin)))
+            edge.setAttribute("ui.style", "fill-color: green;");
+    }
+
+    public void reinitialiserCouleurs()
+    {
+        for (int i = 0; i < this.graph.getNodeCount(); i++)
+            this.graph.getNode(i).setAttribute("ui.style", "fill-color: black;");
+
+        for (int i = 0; i < this.graph.getEdgeCount(); i++)
+            this.graph.getEdge(i).setAttribute("ui.style", "fill-color: black;");
     }
 
     public String getPlusCourtCheminTextuelEtGraphique(String pointDebut, String pointFin)

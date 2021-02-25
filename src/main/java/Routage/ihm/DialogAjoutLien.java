@@ -1,7 +1,6 @@
-package Routage.ihm.panels;
+package Routage.ihm;
 
 import org.graphstream.graph.Edge;
-import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import javax.swing.*;
@@ -21,6 +20,7 @@ public class DialogAjoutLien extends JDialog
     private final JButton           valider;
 
     private final SingleGraph graph;
+    private final JPanel panelCout;
 
     public DialogAjoutLien( SingleGraph graph )
     {
@@ -97,8 +97,12 @@ public class DialogAjoutLien extends JDialog
         list.add(new JLabel("destination: "));
         list.add(this.destination);
 
+        this.panelCout = new JPanel(new BorderLayout());
+        panelCout.add(new JLabel("Cout: "), BorderLayout.WEST);
+        panelCout.add(this.cout, BorderLayout.CENTER);
+
         tmp.add(list);
-        tmp.add(this.cout);
+        tmp.add(panelCout);
 
         this.add(tmp, BorderLayout.CENTER);
 
@@ -110,7 +114,7 @@ public class DialogAjoutLien extends JDialog
         this.pack();
         this.setLocationRelativeTo(null);
 
-        this.cout.setVisible(false);
+        this.panelCout.setVisible(false);
 
         this.setModal(true);
         this.setVisible(true);
@@ -127,9 +131,9 @@ public class DialogAjoutLien extends JDialog
 
             boolean isVisible = dep.contains("RO") && des.contains("RO");
 
-            if( DialogAjoutLien.this.cout.isVisible() != isVisible )
+            if( DialogAjoutLien.this.panelCout.isVisible() != isVisible )
             {
-                DialogAjoutLien.this.cout.setVisible(isVisible);
+                DialogAjoutLien.this.panelCout.setVisible(isVisible);
                 DialogAjoutLien.this.paintComponents(DialogAjoutLien.this.getGraphics());
             }
         }

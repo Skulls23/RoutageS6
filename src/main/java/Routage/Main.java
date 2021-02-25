@@ -2,6 +2,7 @@ package Routage;
 
 import Routage.ihm.IHMGUI;
 import Routage.metier.Metier;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import javax.swing.*;
@@ -68,5 +69,25 @@ public class Main
     public int getNodeCountFor( boolean isPC )
     {
         return this.ihm.getNodeCountFor(isPC);
+    }
+
+    public int getNodeCount()
+    {
+        return this.graph.getNodeCount();
+    }
+
+    public Node getNode(int i)
+    {
+        return this.graph.getNode(i);
+    }
+
+    public String getPlusCourtCheminTextuelEtGraphique(String selectedItem, String selectedItem1)
+    {
+        return this.metier.getPlusCourtCheminTextuelEtGraphique(selectedItem, selectedItem1);
+    }
+
+    public void reinitialiserCouleurs()
+    {
+        this.metier.reinitialiserCouleurs();
     }
 }
