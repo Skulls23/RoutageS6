@@ -1,8 +1,10 @@
 package Routage.metier;
 
+import Routage.Main;
 import org.graphstream.algorithm.Dijkstra;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,26 +16,35 @@ https://javadoc.io/doc/org.graphstream
  */
 public class Metier
 {
-    public static String getPlusCourtCheminTextuel(Graph graph, String pointDebut, String pointFin)
+    private final Main ctrl;
+    private final SingleGraph graph;
+
+    public Metier(Main ctrl, SingleGraph graph)
+    {
+        this.ctrl = ctrl;
+        this.graph = graph;
+    }
+
+    public String getPlusCourtCheminTextuel(String pointDebut, String pointFin)
     {
         Dijkstra dijkstra = Metier.setupDijkstra(graph, pointDebut);
         return dijkstra.getPath(graph.getNode(pointFin)) + " " + dijkstra.getPathLength(graph.getNode(pointFin));
     }
 
-    public static void getPlusCourtCheminGraphique(Graph graph, String pointDebut, String pointFin)
+    public void getPlusCourtCheminGraphique(String pointDebut, String pointFin)
     {
-        Dijkstra dijkstra = Metier.setupDijkstra(graph, pointDebut);
-        for (Node node : dijkstra.getPathNodes(graph.getNode(pointFin)))
+        Dijkstra dijkstra = Metier.setupDijkstra(this.graph, pointDebut);
+        for (Node node : dijkstra.getPathNodes(this.graph.getNode(pointFin)))
             node.setAttribute("ui.style", "fill-color: green;");
     }
 
-    public static String getPlusCourtCheminTextuelEtGraphique(Graph graph, String pointDebut, String pointFin)
+    public String getPlusCourtCheminTextuelEtGraphique(String pointDebut, String pointFin)
     {
-        Metier.getPlusCourtCheminGraphique(graph, pointDebut, pointFin);
-        return Metier.getPlusCourtCheminTextuel(graph, pointDebut, pointFin);
+        this.getPlusCourtCheminGraphique(pointDebut, pointFin);
+        return this.getPlusCourtCheminTextuel(pointDebut, pointFin);
     }
 
-    public static HashMap<String, HashMap<String, TreeMap<String, Double>>> getTableRoutage(Graph graph)
+    public HashMap<String, HashMap<String, TreeMap<String, Double>>> getTableRoutage()
     {
         StringBuilder ret = new StringBuilder();
         Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "length");
@@ -41,9 +52,12 @@ public class Metier
         HashMap<String, HashMap<String, TreeMap<String, Double>>> hashSite = new HashMap<>();
 
         //on trouve le noeud de depart
-        for(int i=0; i<graph.getNodeCount(); i++)
+        for(int i=0; i<this.ctrl.getNodeCountFor(false); i++)
         {
-            Node pointDebut = graph.getNode(i);
+            Node pointDebut = graph.getNode("RO" + (i+1));
+
+            //if( pointDebut.getId().contains("PC") ) continue; // n'est plus utile (normalement)
+
             ret.append("\n\t").append(pointDebut.getId()).append("\n");
             dijkstra.init(graph);
             dijkstra.setSource(pointDebut);
@@ -60,13 +74,15 @@ public class Metier
             HashMap<String, TreeMap<String, Double>> listAllDest = new HashMap<>();
 
             //on trouve le noeud de fin
-            for(int j=0; j<graph.getNodeCount(); j++)
+            for(int j=0; j<this.ctrl.getNodeCountFor(false); j++)
             {
                 if(j == i && j+1 == graph.getNodeCount())
                     break;
                 else if (j == i)
                     j++;
-                Node pointFin = graph.getNode(j);
+                Node pointFin = graph.getNode("RO" + (j+1));
+
+                //if( pointFin.getId().contains("PC") ) continue; // n'est plus utile (normalement)
 
                 ret.append("\t").append(pointDebut.getId());
 

@@ -5,6 +5,7 @@ import Routage.ihm.panels.PanelTableRoutage;
 import Routage.metier.Metier;
 import Routage.ihm.panels.DialogAjoutLien;
 import Routage.ihm.panels.PanelGraphViewer;
+import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.graphstream.ui.spriteManager.SpriteManager;
 
@@ -39,21 +40,27 @@ public class IHMGUI extends JFrame
         this.ajoutPC.addActionListener(event ->
         {
             int num = this.getNodeCountFor(true) + 1;
-            this.theGraph.addNode("PC" + num).setAttribute("label", "PC" + num);
+
+            Node n = this.theGraph.addNode("PC" + num);
+            n.setAttribute("label", "PC" + num);
+            n.setAttribute("ui.style", "text-background-mode: plain; text-background-color: white;text-alignment: under;text-size: 15;");
         });
 
         this.ajoutRouteur = new JButton("Ajouter un routeur");
         this.ajoutRouteur.addActionListener(event ->
         {
             int num = this.getNodeCountFor(false) + 1;
-            this.theGraph.addNode("RO" + num).setAttribute("label", "RO" + num);
+
+            Node n = this.theGraph.addNode("RO" + num);
+            n.setAttribute("label", "RO" + num);
+            n.setAttribute("ui.style", "text-background-mode: plain; text-background-color: white;text-alignment: under;text-size: 15;");
         });
 
         this.ajoutLien = new JButton("Ajout un lien");
         this.ajoutLien.addActionListener(event -> new DialogAjoutLien(this.theGraph));
 
         this.afficherTableRoutage = new JButton("Afficher la table de routage");
-        this.afficherTableRoutage.addActionListener(event -> this.panelRoutage.setHashMapSites(Metier.getTableRoutage(theGraph)));
+        this.afficherTableRoutage.addActionListener(event -> this.panelRoutage.setHashMapSites(this.ctrl.getTableRoutage()));
 
         JPanel panelTMP = new JPanel();
         panelTMP.setLayout(new BoxLayout(panelTMP, BoxLayout.Y_AXIS));
@@ -61,9 +68,13 @@ public class IHMGUI extends JFrame
         panelTMP.add(this.ajoutPC);
         panelTMP.add(this.ajoutRouteur);
         panelTMP.add(this.ajoutLien);
-        panelTMP.add(this.afficherTableRoutage);
 
-        this.add(panelTMP, BorderLayout.EAST);
+        JPanel panelDroite = new JPanel(new BorderLayout());
+
+        panelDroite.add(panelTMP, BorderLayout.CENTER);
+        panelDroite.add(this.afficherTableRoutage, BorderLayout.SOUTH);
+
+        this.add(panelDroite, BorderLayout.EAST);
 
         this.pack();
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);

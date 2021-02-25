@@ -60,7 +60,12 @@ public class DialogAjoutLien extends JDialog
 
             Edge edge = this.graph.addEdge( dep+des, dep, des, false);
 
-            if( cout > 0 ) edge.setAttribute("length", String.valueOf(cout));
+            if( cout > 0 )
+            {
+                edge.setAttribute("length", cout);
+                edge.setAttribute("label", edge.getAttribute("length"));
+                edge.setAttribute("ui.style", "text-background-mode: plain; text-background-color: white;text-size: 15;");
+            }
 
             this.setVisible(false);
         });

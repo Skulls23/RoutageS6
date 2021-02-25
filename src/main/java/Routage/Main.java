@@ -1,13 +1,17 @@
 package Routage;
 
 import Routage.ihm.IHMGUI;
+import Routage.metier.Metier;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import javax.swing.*;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 public class Main
 {
     private final IHMGUI ihm;
+    private final Metier metier;
 
     private final SingleGraph graph;
 
@@ -15,19 +19,19 @@ public class Main
     {
         this.graph = new SingleGraph("Graph1");
 
-        graph.addNode("A");
-        graph.addNode("B");
-        graph.addNode("C");
-        graph.addNode("D");
-        graph.addNode("E");
-        graph.addNode("F");
-        graph.addEdge("AB", "A", "B").setAttribute("length", 2);
-        graph.addEdge("BC", "B", "C").setAttribute("length", 3);
-        graph.addEdge("CF", "C", "F").setAttribute("length", 40);
-        graph.addEdge("AE", "A", "E").setAttribute("length", 7);
-        graph.addEdge("EF", "E", "F").setAttribute("length", 1);
-        graph.addEdge("EC", "E", "C").setAttribute("length", 3);
-        graph.addEdge("ED", "E", "D").setAttribute("length", 1);
+        graph.addNode("RO1");
+        graph.addNode("RO2");
+        graph.addNode("RO3");
+        graph.addNode("RO4");
+        graph.addNode("RO5");
+        graph.addNode("RO6");
+        graph.addEdge("RO1RO2", "RO1", "RO2").setAttribute("length", 2);
+        graph.addEdge("RO2RO3", "RO2", "RO3").setAttribute("length", 3);
+        graph.addEdge("RO3RO6", "RO3", "RO6").setAttribute("length", 40);
+        graph.addEdge("RO1RO5", "RO1", "RO5").setAttribute("length", 7);
+        graph.addEdge("RO5RO6", "RO5", "RO6").setAttribute("length", 1);
+        graph.addEdge("RO5RO3", "RO5", "RO3").setAttribute("length", 3);
+        graph.addEdge("RO5RO4", "RO5", "RO4").setAttribute("length", 1);
 
 
         for(int i=0; i<graph.getEdgeCount(); i++)
@@ -45,7 +49,8 @@ public class Main
         }
         //Metier.getPlusCourtCheminGraphique(graph, "A", "F");
 
-        this.ihm = new IHMGUI(this, graph);
+        this.metier = new Metier(this, graph);
+        this.ihm    = new IHMGUI(this, graph);
     }
 
     public static void main(String[] args)
@@ -53,5 +58,15 @@ public class Main
         //System.setProperty("org.graphstream.ui", "swing");
 
         SwingUtilities.invokeLater(Main::new);
+    }
+
+    public HashMap<String, HashMap<String, TreeMap<String, Double>>> getTableRoutage()
+    {
+        return this.metier.getTableRoutage();
+    }
+
+    public int getNodeCountFor( boolean isPC )
+    {
+        return this.ihm.getNodeCountFor(isPC);
     }
 }

@@ -15,13 +15,13 @@ public class PanelTableRoutage extends JScrollPane
 
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        this.setPreferredSize(new Dimension(900,200));//.setBounds(50, 30, 300, 50);
+        this.setPreferredSize(new Dimension(900,150));//.setBounds(50, 30, 300, 50);
 
         this.panelPose = new JPanel();
 
         this.panelPose.setLayout(new BoxLayout(this.panelPose, BoxLayout.X_AXIS));
 
-        this.getViewport().add(this.panelPose);
+        this.getViewport().add(this.panelPose, BorderLayout.CENTER);
     }
 
     public PanelTableRoutage(HashMap<String, HashMap<String, TreeMap<String, Double>>> hashSite)
@@ -43,7 +43,7 @@ public class PanelTableRoutage extends JScrollPane
 
             int cpt = 0;
             for (String keyDest : allDest.keySet())
-                allLines[cpt++] = keyDep + keyDest + " : " + allDest.get(keyDest);
+                allLines[cpt++] = keyDest + " : " + allDest.get(keyDest);
 
             StringBuilder tmp = new StringBuilder();
 
