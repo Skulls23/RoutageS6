@@ -7,9 +7,8 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /*
 https://graphstream-project.org/doc/Algorithms/Shortest-path/Dijkstra/
@@ -28,7 +27,7 @@ public class Metier
 
     public String getPlusCourtCheminTextuel(String pointDebut, String pointFin)
     {
-        Dijkstra dijkstra = Metier.setupDijkstra(graph, pointDebut);
+        Dijkstra dijkstra = this.setupDijkstra(pointDebut);
         return dijkstra.getPath(graph.getNode(pointFin)) + " " + dijkstra.getPathLength(graph.getNode(pointFin));
     }
 
@@ -36,7 +35,7 @@ public class Metier
     {
         this.reinitialiserCouleurs();
 
-        Dijkstra dijkstra = Metier.setupDijkstra(this.graph, pointDebut);
+        Dijkstra dijkstra = this.setupDijkstra(pointDebut);
 
         for (Node node : dijkstra.getPathNodes(this.graph.getNode(pointFin)))
             node.setAttribute("ui.style", "fill-color: green;");
@@ -67,12 +66,10 @@ public class Metier
 
         HashMap<String, HashMap<String, TreeMap<String, Double>>> hashSite = new HashMap<>();
 
-        //on trouve le noeud de depart
-        for(int i=0; i<this.ctrl.getNodeCountFor(false); i++)
+        this.graph.nodes().forEachOrdered(pointDebut ->
         {
-            Node pointDebut = graph.getNode("RO" + (i+1));
-
-            //if( pointDebut.getId().contains("PC") ) continue; // n'est plus utile (normalement)
+            if( pointDebut.getId().contains("PC") )
+                return;
 
             ret.append("\n\t").append(pointDebut.getId()).append("\n");
             dijkstra.init(graph);
@@ -84,48 +81,60 @@ public class Metier
             //on definit ses voisins
             for (int k = 0; k < tabVoisin.length; k++)
             {
-                tabPoidsVersVoisin[k] = (double) (int) pointDebut.getEdge(k).getAttribute("length");
+                Edge e = pointDebut.getEdge(k);
+
+                tabPoidsVersVoisin[k] = e.getAttribute("length") == null ? Double.NEGATIVE_INFINITY : (double) e.getAttribute("length");
             }
 
             HashMap<String, TreeMap<String, Double>> listAllDest = new HashMap<>();
 
             //on trouve le noeud de fin
-            for(int j=0; j<this.ctrl.getNodeCountFor(false); j++)
+            this.graph.nodes().forEachOrdered( pointFin ->
             {
-                if(j == i && j+1 == graph.getNodeCount())
-                    break;
-                else if (j == i)
-                    j++;
-                Node pointFin = graph.getNode("RO" + (j+1));
-
-                //if( pointFin.getId().contains("PC") ) continue; // n'est plus utile (normalement)
+                if( pointDebut == pointFin || pointFin.getId().contains("PC") )
+                    return;
 
                 ret.append("\t").append(pointDebut.getId());
 
-                Metier.setupDijkstra(graph, pointDebut.getId());
+                this.setupDijkstra(pointDebut.getId());
 
                 HashMap<String, Double> mapPoidsVoisinVersFinal = new HashMap<>(); //lie un poids de chemin a un nom de noeud
                 //on parcours du premier voisin du point de depart vers le point de fin, puis on prend le deuxieme voisin, ...
                 for (int k = 0; k < tabVoisin.length; k++)
                 {
+                    if ( ((Node) tabVoisin[k]).getId().contains("PC") )
+                        continue;
+
                     dijkstra.setSource((Node)tabVoisin[k]);
                     dijkstra.compute();
 
                     mapPoidsVoisinVersFinal.put(((Node)tabVoisin[k]).getId(), dijkstra.getPathLength(pointFin) + tabPoidsVersVoisin[k]);
                 }
-                TreeMap<String, Double> treeMap = new TreeMap<>(mapPoidsVoisinVersFinal); //tri la hashmap par poids de chemin
+                TreeMap<String, Double> treeMap = new TreeMap<>((o1, o2) -> 1);// si on met autre chose que treeMap, certaines valeur manquent...
+                // si on change le comparateur pour comparer directement les Double, pareil.
+                // seule solution trouver, trier "manuellement" et mettre un comparateur inutile.
+
+                Double[] tab = mapPoidsVoisinVersFinal.values().toArray(new Double[0]);
+                Arrays.sort(tab);
+
+                ArrayList<String> set = new ArrayList<>(mapPoidsVoisinVersFinal.keySet());
+                ArrayList<Double> col = new ArrayList<>(mapPoidsVoisinVersFinal.values());
+
+                for (Double aDouble : tab) treeMap.put(set.get(col.indexOf(aDouble)), aDouble);
+
                 ret.append(pointFin.getId()).append(" : ").append(treeMap).append("\n");
                 listAllDest.put(pointFin.getId(), treeMap);
-            }
+            });
 
             hashSite.put(pointDebut.getId(), listAllDest);
-        }
+        });
+
         //System.out.println(ret.toString());
 
         return hashSite;
     }
 
-    private static Dijkstra setupDijkstra(Graph graph, String pointDebut)
+    private Dijkstra setupDijkstra(String pointDebut)
     {
         Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "length");
         dijkstra.init(graph);

@@ -26,13 +26,13 @@ public class Main
         graph.addNode("RO4");
         graph.addNode("RO5");
         graph.addNode("RO6");
-        graph.addEdge("RO1RO2", "RO1", "RO2").setAttribute("length", 2);
-        graph.addEdge("RO2RO3", "RO2", "RO3").setAttribute("length", 3);
-        graph.addEdge("RO3RO6", "RO3", "RO6").setAttribute("length", 40);
-        graph.addEdge("RO1RO5", "RO1", "RO5").setAttribute("length", 7);
-        graph.addEdge("RO5RO6", "RO5", "RO6").setAttribute("length", 1);
-        graph.addEdge("RO5RO3", "RO5", "RO3").setAttribute("length", 3);
-        graph.addEdge("RO5RO4", "RO5", "RO4").setAttribute("length", 1);
+        graph.addEdge("RO1RO2", "RO1", "RO2").setAttribute("length", 2.0);
+        graph.addEdge("RO2RO3", "RO2", "RO3").setAttribute("length", 3.0);
+        graph.addEdge("RO3RO6", "RO3", "RO6").setAttribute("length", 40.0);
+        graph.addEdge("RO1RO5", "RO1", "RO5").setAttribute("length", 7.0);
+        graph.addEdge("RO5RO6", "RO5", "RO6").setAttribute("length", 1.0);
+        graph.addEdge("RO5RO3", "RO5", "RO3").setAttribute("length", 3.0);
+        graph.addEdge("RO5RO4", "RO5", "RO4").setAttribute("length", 1.0);
 
 
         for(int i=0; i<graph.getEdgeCount(); i++)
@@ -69,6 +69,11 @@ public class Main
     public int getNodeCountFor( boolean isPC )
     {
         return this.ihm.getNodeCountFor(isPC);
+    }
+
+    public int getValMaxNodeFor( boolean isPC )
+    {
+        return this.ihm.getValMaxNodeFor(isPC);
     }
 
     public int getNodeCount()

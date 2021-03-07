@@ -19,6 +19,8 @@ public class IHMGUI extends JFrame
     private final JButton ajoutLien;
     private final JButton afficherTableRoutage;
     private final JButton calculChemin;
+    private final JButton supprimerNode;
+    private final JButton supprimerEdge;
     private final PanelTableRoutage panelRoutage;
 
     public IHMGUI( Main ctrl, SingleGraph graph )
@@ -60,6 +62,12 @@ public class IHMGUI extends JFrame
         this.calculChemin = new JButton("Calcul chemin");
         this.calculChemin.addActionListener(event -> new DialogCalculChemin(this.ctrl));
 
+        this.supprimerNode = new JButton("Supprimer PC/RO");
+        this.supprimerNode.addActionListener(e -> new DialogSupprimer(this.theGraph, true));
+
+        this.supprimerEdge = new JButton("Supprimer lien");
+        this.supprimerEdge.addActionListener(e -> new DialogSupprimer(this.theGraph, false));
+
         JPanel panelTMP = new JPanel();
         panelTMP.setLayout(new BoxLayout(panelTMP, BoxLayout.Y_AXIS));
 
@@ -67,6 +75,8 @@ public class IHMGUI extends JFrame
         panelTMP.add(this.ajoutRouteur);
         panelTMP.add(this.ajoutLien);
         panelTMP.add(this.calculChemin);
+        panelTMP.add(this.supprimerNode);
+        panelTMP.add(this.supprimerEdge);
 
         JPanel panelDroite = new JPanel(new BorderLayout());
 
@@ -90,5 +100,22 @@ public class IHMGUI extends JFrame
                 cpt++;
 
         return cpt;
+    }
+
+    public int getValMaxNodeFor( boolean isPC )
+    {
+        int max = 0;
+
+        for (int i = 0; i < this.theGraph.getNodeCount(); i++)
+        {
+            if( this.theGraph.getNode(i).getId().contains(isPC ? "PC" : "RO") )
+            {
+                int val = Integer.parseInt(this.theGraph.getNode(i).getId().substring(2));
+
+                if( max < val ) max = val;
+            }
+        }
+
+        return max;
     }
 }

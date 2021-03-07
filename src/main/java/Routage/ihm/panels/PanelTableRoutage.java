@@ -57,8 +57,8 @@ public class PanelTableRoutage extends JScrollPane
             label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
             this.panelPose.add(label);
-
-            this.paintComponents(this.getGraphics());
         }
+
+        this.paintComponents(this.getGraphics());
     }
 }

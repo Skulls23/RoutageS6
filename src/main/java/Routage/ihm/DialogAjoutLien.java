@@ -45,9 +45,9 @@ public class DialogAjoutLien extends JDialog
 
         this.valider.addActionListener(event ->
         {
-            String dep = this.depart.getSelectedItem()      == null ? "" : this.depart.getSelectedItem().toString();
-            String des = this.destination.getSelectedItem() == null ? "" : this.destination.getSelectedItem().toString();
-            int cout   = Integer.parseInt(this.cout.getText().isEmpty() ? "0" : this.cout.getText());
+            String dep  = this.depart.getSelectedItem()      == null ? "" : this.depart.getSelectedItem().toString();
+            String des  = this.destination.getSelectedItem() == null ? "" : this.destination.getSelectedItem().toString();
+            double cout = Double.parseDouble(this.cout.getText().isEmpty() ? "0.0" : this.cout.getText());
 
             if( cout != 0 && (dep.contains("PC") || des.contains("PC")) ) // ne devrai pas arriver si ihm bien faite
                 cout = 0;
