@@ -61,7 +61,7 @@ public class Main
         SwingUtilities.invokeLater(Main::new);
     }
 
-    public HashMap<String, HashMap<String, TreeMap<String, Double>>> getTableRoutage()
+    public TreeMap<String, TreeMap<String, TreeMap<String, Double>>> getTableRoutage()
     {
         return this.metier.getTableRoutage();
     }

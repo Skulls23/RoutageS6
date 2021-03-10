@@ -24,14 +24,14 @@ public class PanelTableRoutage extends JScrollPane
         this.getViewport().add(this.panelPose, BorderLayout.CENTER);
     }
 
-    public PanelTableRoutage(HashMap<String, HashMap<String, TreeMap<String, Double>>> hashSite)
+    public PanelTableRoutage(TreeMap<String, TreeMap<String, TreeMap<String, Double>>> hashSite)
     {
         this();
 
         this.setHashMapSites(hashSite);
     }
 
-    public void setHashMapSites(HashMap<String, HashMap<String, TreeMap<String, Double>>> hashSite)
+    public void setHashMapSites(TreeMap<String, TreeMap<String, TreeMap<String, Double>>> hashSite)
     {
         this.panelPose.removeAll();
 
@@ -39,7 +39,7 @@ public class PanelTableRoutage extends JScrollPane
         {
             String[] allLines = new String[hashSite.get(keyDep).size()];
 
-            HashMap<String, TreeMap<String, Double>> allDest = hashSite.get(keyDep);
+            TreeMap<String, TreeMap<String, Double>> allDest = hashSite.get(keyDep);
 
             int cpt = 0;
             for (String keyDest : allDest.keySet())

@@ -59,12 +59,12 @@ public class Metier
         return this.getPlusCourtCheminTextuel(pointDebut, pointFin);
     }
 
-    public HashMap<String, HashMap<String, TreeMap<String, Double>>> getTableRoutage()
+    public TreeMap<String, TreeMap<String, TreeMap<String, Double>>> getTableRoutage()
     {
         StringBuilder ret = new StringBuilder();
         Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "length");
 
-        HashMap<String, HashMap<String, TreeMap<String, Double>>> hashSite = new HashMap<>();
+        TreeMap<String, TreeMap<String, TreeMap<String, Double>>> hashSite = new TreeMap<>();
 
         this.graph.nodes().forEachOrdered(pointDebut ->
         {
@@ -86,7 +86,7 @@ public class Metier
                 tabPoidsVersVoisin[k] = e.getAttribute("length") == null ? Double.NEGATIVE_INFINITY : (double) e.getAttribute("length");
             }
 
-            HashMap<String, TreeMap<String, Double>> listAllDest = new HashMap<>();
+            TreeMap<String, TreeMap<String, Double>> listAllDest = new TreeMap<>();
 
             //on trouve le noeud de fin
             this.graph.nodes().forEachOrdered( pointFin ->
