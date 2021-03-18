@@ -1,9 +1,11 @@
 .pc
 {
+    shape:box;
 }
 
 .routeur
 {
+    shape:circle;
 }
 
 .texteVisible

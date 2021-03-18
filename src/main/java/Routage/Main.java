@@ -1,5 +1,6 @@
 package Routage;
 
+import Routage.ihm.EnumCSS;
 import Routage.ihm.IHMGUI;
 import Routage.metier.Metier;
 import org.graphstream.graph.Node;
@@ -37,15 +38,13 @@ public class Main
         for(int i=0; i<graph.getEdgeCount(); i++)
         {
             graph.getEdge(i).setAttribute("label", graph.getEdge(i).getAttribute("length"));
-            //graph.getEdge(i).setAttribute("ui.stylesheet", "url('ihm/style.css')"); //on peut opti via un fichier css, mais j'ai pas encore trouvé
-            //graph.getEdge(i).setAttribute("ui.class", ".texteVisible");
-            graph.getEdge(i).setAttribute("ui.style", "text-background-mode: plain; text-background-color: white;text-size: 15;");
+            graph.getEdge(i).setAttribute("ui.style", EnumCSS.STYLE_EDGE.getS());
         }
 
         for(int i=0; i<graph.getNodeCount(); i++)
         {
             graph.getNode(i).setAttribute("label", graph.getNode(i).getId());
-            graph.getNode(i).setAttribute("ui.style", "text-background-mode: plain; text-background-color: white;text-alignment: under;text-size: 15;");
+            graph.getNode(i).setAttribute("ui.style", EnumCSS.STYLE_ROUTEUR.getS());
         }
         //Metier.getPlusCourtCheminGraphique(graph, "A", "F");
 
