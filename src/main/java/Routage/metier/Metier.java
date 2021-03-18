@@ -335,15 +335,15 @@ public class Metier
 
                     if( cpt < listNode.size()-1 ) // il y as un apres
                     {
-                        HashMap<String, Integer> hashIN = hashINOUT.get("OUT");
+                        HashMap<String, Integer> hashOut = hashINOUT.get("OUT");
 
                         ArrayList<Node> list = listNode.get(cpt).neighborNodes().collect(Collectors.toCollection(ArrayList::new));
 
-                        int port = list.indexOf(list.get(cpt+1));
+                        int port = list.indexOf(listNode.get(cpt+1))+1;
                         int vci  = this.getMaxVCIForNodeAndPort(listNode.get(cpt), false, port, tableVCI) + 1;
 
-                        hashIN.replace("PORT", port);
-                        hashIN.replace("VCI", vci);
+                        hashOut.replace("PORT", port);
+                        hashOut.replace("VCI", vci);
                     }
                 }
 
