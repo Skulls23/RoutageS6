@@ -74,7 +74,7 @@ public class PanelTableVCI extends JScrollPane
         {
             JPanel panelGrid = new JPanel(new GridLayout(1, tableVCI.get(chemin).size()*2*2));
 
-            JLabel label = this.getLabelWithBorder(chemin, Color.BLACK);
+            JLabel label = this.getLabelWithBorder(chemin.substring(0, chemin.indexOf(" ")), Color.BLACK);
 
             panelGaucheGrid.add(label);
 
