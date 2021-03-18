@@ -49,8 +49,6 @@ public class Metier
      */
     public void getPlusCourtCheminGraphique(String pointDebut, String pointFin)
     {
-        this.reinitialiserCouleurs();
-
         Dijkstra dijkstra = this.setupDijkstra(pointDebut);
 
         for (Node node : dijkstra.getPathNodes(this.graph.getNode(pointFin)))
