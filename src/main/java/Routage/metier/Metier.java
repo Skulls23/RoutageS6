@@ -232,7 +232,7 @@ public class Metier
         return dijkstra.getPathNodes(graph.getNode(pointFin));
     }
 
-    public HashMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> getVCI( Node[] cheminEnPlus )
+    public TreeMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> getVCI( Node[] cheminEnPlus )
     {
         ArrayList<Node> routeurs = new ArrayList<>();
 
@@ -257,10 +257,11 @@ public class Metier
          *          }
          *  }
          */
-        HashMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> tableVCI = new HashMap<>();
+        TreeMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> tableVCI = new TreeMap<>();
 
         this.listchemin.add(cheminEnPlus);
 
+        int nb = 0;
         for (Node[] chemin : this.listchemin)
         {
             String keyPath = chemin[0].getId() + "->" + chemin[1].getId();
@@ -298,7 +299,7 @@ public class Metier
             }
             while (tableVCI.containsKey(keyPath + " " + numero));
 
-            keyPath += " " + numero;
+            keyPath = nb++ + " " + keyPath + " " + numero;
 
             tableVCI.put(keyPath, routeurMap);
         }
@@ -308,7 +309,10 @@ public class Metier
             String[] che      = chemin.split("->");
 
             if( che[1].contains(" ") )
-                che[1] = che[1].substring(0, che[1].length()-2).trim();
+                che[1] = che[1].substring(0, che[1].lastIndexOf(" ")).trim();
+
+            if( che[0].contains(" "))
+                che[0] = che[0].substring(che[0].indexOf(" ")+1);
 
             Iterable<Node> it = this.getCheminParNode(che[0], che[1]);
 
@@ -333,12 +337,12 @@ public class Metier
 
                     if( avant != null )
                     {
-                        HashMap<String, Integer> hashIN = hashINOUT.get("IN");
+                        HashMap<String, Integer> hashIN = hashINOUT.get("OUT");
 
                         ArrayList<Node> list = listNode.get(cpt).neighborNodes().collect(Collectors.toCollection(ArrayList::new));
 
-                        int port = list.indexOf(avant);
-                        int vci  = this.getMaxVCIForNodeAndPort(listNode.get(cpt), true, port, tableVCI) + 1;
+                        int port = list.indexOf(avant)+1;
+                        int vci  = this.getMaxVCIForNodeAndPort(listNode.get(cpt), false, port, tableVCI) + 1;
 
                         hashIN.replace("PORT", port);
                         hashIN.replace("VCI", vci);
@@ -346,12 +350,12 @@ public class Metier
 
                     if( cpt < listNode.size()-1 ) // il y as un apres
                     {
-                        HashMap<String, Integer> hashOut = hashINOUT.get("OUT");
+                        HashMap<String, Integer> hashOut = hashINOUT.get("IN");
 
                         ArrayList<Node> list = listNode.get(cpt).neighborNodes().collect(Collectors.toCollection(ArrayList::new));
 
                         int port = list.indexOf(listNode.get(cpt+1))+1;
-                        int vci  = this.getMaxVCIForNodeAndPort(listNode.get(cpt), false, port, tableVCI) + 1;
+                        int vci  = this.getMaxVCIForNodeAndPort(listNode.get(cpt), true, port, tableVCI) + 1;
 
                         hashOut.replace("PORT", port);
                         hashOut.replace("VCI", vci);
@@ -365,7 +369,7 @@ public class Metier
         return tableVCI;
     }
 
-    private int getMaxVCIForNodeAndPort( Node node, boolean bIn, int port, HashMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> tableVCI)
+    private int getMaxVCIForNodeAndPort( Node node, boolean bIn, int port, TreeMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> tableVCI)
     {
         int max = 0;
 

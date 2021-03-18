@@ -65,7 +65,7 @@ public class Main
         return this.metier.getTableRoutage();
     }
 
-    public HashMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> getVCI(Node[] cheminEnPlus )
+    public TreeMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> getVCI(Node[] cheminEnPlus )
     {
         return this.metier.getVCI(cheminEnPlus);
     }

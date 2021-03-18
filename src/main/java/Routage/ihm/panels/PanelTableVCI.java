@@ -5,6 +5,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class PanelTableVCI extends JScrollPane
 {
@@ -25,7 +26,7 @@ public class PanelTableVCI extends JScrollPane
         this.getViewport().add(this.panelPose, BorderLayout.CENTER);
     }
 
-    public void init(HashMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> tableVCI)
+    public void init(TreeMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> tableVCI)
     {
         this.panelPose.removeAll();
 
@@ -74,7 +75,7 @@ public class PanelTableVCI extends JScrollPane
         {
             JPanel panelGrid = new JPanel(new GridLayout(1, tableVCI.get(chemin).size()*2*2));
 
-            JLabel label = this.getLabelWithBorder(chemin.substring(0, chemin.indexOf(" ")), Color.BLACK);
+            JLabel label = this.getLabelWithBorder(chemin.substring(chemin.indexOf(" ")+1, chemin.lastIndexOf(" ")), Color.BLACK);
 
             panelGaucheGrid.add(label);
 
