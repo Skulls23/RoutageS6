@@ -3,6 +3,7 @@ package Routage.ihm;
 import Routage.Main;
 import Routage.ihm.panels.PanelTableRoutage;
 import Routage.ihm.panels.PanelGraphViewer;
+import Routage.ihm.panels.PanelTableVCI;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
@@ -18,10 +19,13 @@ public class IHMGUI extends JFrame
     private final JButton ajoutRouteur;
     private final JButton ajoutLien;
     private final JButton afficherTableRoutage;
+    private final JButton afficherTableVCI;
     private final JButton calculChemin;
     private final JButton supprimerNode;
     private final JButton supprimerEdge;
+
     private final PanelTableRoutage panelRoutage;
+    private final PanelTableVCI     panelTableVCI;
 
     public IHMGUI( Main ctrl, SingleGraph graph )
     {
@@ -30,8 +34,15 @@ public class IHMGUI extends JFrame
 
         this.add(new PanelGraphViewer(graph), BorderLayout.CENTER);
 
-        this.panelRoutage = new PanelTableRoutage();
-        this.add(this.panelRoutage, BorderLayout.SOUTH);
+        this.panelRoutage  = new PanelTableRoutage();
+        this.panelTableVCI = new PanelTableVCI();
+
+        JPanel panelTmp = new JPanel(new BorderLayout());
+
+        panelTmp.add(panelRoutage , BorderLayout.NORTH);
+        panelTmp.add(panelTableVCI, BorderLayout.SOUTH);
+
+        this.add(panelTmp, BorderLayout.SOUTH);
 
         this.ajoutPC = new JButton("Ajouter un PC");
         this.ajoutPC.addActionListener(event ->
@@ -68,6 +79,8 @@ public class IHMGUI extends JFrame
         this.supprimerEdge = new JButton("Supprimer lien");
         this.supprimerEdge.addActionListener(e -> new DialogSupprimer(this.theGraph, false));
 
+        this.afficherTableVCI = new JButton("Afficher VCI");
+
         JPanel panelTMP = new JPanel();
         panelTMP.setLayout(new BoxLayout(panelTMP, BoxLayout.Y_AXIS));
 
@@ -80,8 +93,14 @@ public class IHMGUI extends JFrame
 
         JPanel panelDroite = new JPanel(new BorderLayout());
 
+        JPanel panelSouthDroite = new JPanel();
+        panelSouthDroite.setLayout(new BoxLayout(panelSouthDroite, BoxLayout.Y_AXIS));
+
+        panelSouthDroite.add(this.afficherTableRoutage);
+        panelSouthDroite.add(this.afficherTableVCI);
+
         panelDroite.add(panelTMP, BorderLayout.CENTER);
-        panelDroite.add(this.afficherTableRoutage, BorderLayout.SOUTH);
+        panelDroite.add(panelSouthDroite, BorderLayout.SOUTH);
 
         this.add(panelDroite, BorderLayout.EAST);
 

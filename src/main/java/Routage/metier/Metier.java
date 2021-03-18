@@ -19,10 +19,14 @@ public class Metier
     private final Main ctrl;
     private final SingleGraph graph;
 
+    private final ArrayList<Node[]> listchemin;
+
     public Metier(Main ctrl, SingleGraph graph)
     {
         this.ctrl = ctrl;
         this.graph = graph;
+
+        this.listchemin = new ArrayList<>();
     }
 
     public String getPlusCourtCheminTextuel(String pointDebut, String pointFin)
@@ -141,5 +145,48 @@ public class Metier
         dijkstra.setSource(graph.getNode(pointDebut));
         dijkstra.compute();
         return dijkstra;
+    }
+
+    public void getVCI( Node[] cheminEnPlus )
+    {
+        ArrayList<Node> routeurs = new ArrayList<>();
+
+        this.graph.nodes().forEach(node ->
+        {
+            if (node.getId().contains("RO"))
+                routeurs.add(node);
+        });
+
+        /**
+         *  First HM :{
+         *      key  : RO1->RO2 | RO2->RO4 ect...
+         *      value: {
+         *              key: RO1 | RO2 | RO3 ect...
+         *              value: {
+         *                      key: IN / OUT
+         *                      value: {
+         *                              key: PORT / VCI
+         *                              value: Integer (0, 1, 2, 3, ect...)
+         *                          }
+         *                  }
+         *          }
+         *  }
+         */
+        HashMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> tableVCI = new HashMap<>();
+
+        for (int i = 0; i < this.listchemin.size(); i++)
+        {
+            Node[] chemin = this.listchemin.get(i);
+        }
+    }
+
+    public void resetVCI()
+    {
+        this.listchemin.clear();
+    }
+
+    public void remove( Node[] chemin )
+    {
+        this.listchemin.remove(chemin);
     }
 }
