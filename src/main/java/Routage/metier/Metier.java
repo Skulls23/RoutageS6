@@ -124,7 +124,15 @@ public class Metier
                 ArrayList<String> set = new ArrayList<>(mapPoidsVoisinVersFinal.keySet());
                 ArrayList<Double> col = new ArrayList<>(mapPoidsVoisinVersFinal.values());
 
-                for (Double aDouble : tab) treeMap.put(set.get(col.indexOf(aDouble)), aDouble);
+                for (Double aDouble : tab)
+                {
+                    int i = col.indexOf(aDouble);
+
+                    treeMap.put(set.get(i), aDouble);
+
+                    set.remove(i);
+                    col.remove(i);
+                }
 
                 ret.append(pointFin.getId()).append(" : ").append(treeMap).append("\n");
                 listAllDest.put(pointFin.getId(), treeMap);
