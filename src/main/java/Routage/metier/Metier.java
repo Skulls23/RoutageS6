@@ -66,18 +66,21 @@ public class Metier
 
     public TreeMap<String, TreeMap<String, TreeMap<String, Double>>> getTableRoutage()
     {
-        StringBuilder ret = new StringBuilder();
-        Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "length");
+        SingleGraph graphTemp = getCopieGraph();
+
+        StringBuilder ret      = new StringBuilder();
+        Dijkstra      dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "length");
 
         TreeMap<String, TreeMap<String, TreeMap<String, Double>>> hashSite = new TreeMap<>();
 
-        this.graph.nodes().forEachOrdered(pointDebut ->
+        graphTemp.nodes().forEachOrdered(pointDebut ->
         {
+
             if( pointDebut.getId().contains("PC") )
                 return;
 
             ret.append("\n\t").append(pointDebut.getId()).append("\n");
-            dijkstra.init(graph);
+            dijkstra.init(graphTemp);
             dijkstra.setSource(pointDebut);
             dijkstra.compute();
 
@@ -90,13 +93,14 @@ public class Metier
                 Edge e = pointDebut.getEdge(k);
 
                 tabPoidsVersVoisin[k] = e.getAttribute("length") == null ? Double.NEGATIVE_INFINITY : (double) e.getAttribute("length");
-                //graph.removeEdge((Edge)tabEdgeVoisin[k]);
             }
+
+            for (Object o : tabEdgeVoisin) graphTemp.removeEdge((Edge) o);
 
             TreeMap<String, TreeMap<String, Double>> listAllDest = new TreeMap<>();
 
             //on trouve le noeud de fin
-            this.graph.nodes().forEachOrdered( pointFin ->
+            graphTemp.nodes().forEachOrdered( pointFin ->
             {
                 if( pointDebut == pointFin || pointFin.getId().contains("PC") )
                     return;
@@ -142,13 +146,17 @@ public class Metier
             });
 
             hashSite.put(pointDebut.getId(), listAllDest);
-            /*for (int k = 0; k < tabVoisin.length; k++)
-                graph.addEdge(((Edge)tabEdgeVoisin[k]).getId(), ((Edge)tabEdgeVoisin[k]).getNode0(), ((Edge)tabEdgeVoisin[k]).getNode1());*/
-
+            for (Object o : tabEdgeVoisin)
+            {
+                Edge e = ((Edge) o);
+                graphTemp.addEdge(e.getId(), e.getNode0(), e.getNode1());
+                graphTemp.getEdge(e.getId()).setAttribute("length", e.getAttribute("length"));
+                graphTemp.getEdge(e.getId()).setAttribute("label", e.getAttribute("label"));
+                graphTemp.getEdge(e.getId()).setAttribute("ui.style", e.getAttribute("ui.style"));
+            }
         });
 
         //System.out.println(ret.toString());
-
         return hashSite;
     }
 
@@ -159,6 +167,25 @@ public class Metier
         dijkstra.setSource(graph.getNode(pointDebut));
         dijkstra.compute();
         return dijkstra;
+    }
+
+    /**
+     * Permet un equivalent de constructeur par recopie
+     * @return une copie de this.graph
+     */
+    private SingleGraph getCopieGraph()
+    {
+        SingleGraph   graphTemp = new SingleGraph("temporaire");
+
+        for(int i=0; i<graph.getNodeCount(); i++)
+            graphTemp.addNode(graph.getNode(i).getId());
+
+        for(int i=0; i<graph.getEdgeCount(); i++)
+        {
+            graphTemp.addEdge(graph.getEdge(i).getId(), graphTemp.getNode(graph.getEdge(i).getNode0().getId()), graphTemp.getNode(graph.getEdge(i).getNode1().getId()));
+            graphTemp.getEdge(i).setAttribute("length"  , graph.getEdge(i).getAttribute("length"));
+        }
+        return graphTemp;
     }
 
     private Iterable<Node> getCheminParNode(String pointDebut, String pointFin)
