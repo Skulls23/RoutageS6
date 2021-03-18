@@ -5,6 +5,7 @@ import org.graphstream.algorithm.Dijkstra;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
+import org.graphstream.graph.Path;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import java.util.*;
@@ -160,13 +161,13 @@ public class Metier
         return dijkstra;
     }
 
-    private Iterable getCheminParNode(String pointDebut, String pointFin)
+    private Iterable<Node> getCheminParNode(String pointDebut, String pointFin)
     {
         Dijkstra dijkstra = setupDijkstra(pointDebut);
-        return dijkstra.getAllPaths(graph.getNode(pointFin));
+        return dijkstra.getPathNodes(graph.getNode(pointFin));
     }
 
-    public void getVCI( Node[] cheminEnPlus )
+    public HashMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> getVCI( Node[] cheminEnPlus )
     {
         ArrayList<Node> routeurs = new ArrayList<>();
 
@@ -193,10 +194,117 @@ public class Metier
          */
         HashMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> tableVCI = new HashMap<>();
 
-        for (int i = 0; i < this.listchemin.size(); i++)
+        this.listchemin.add(cheminEnPlus);
+
+        for (Node[] chemin : this.listchemin)
         {
-            Node[] chemin = this.listchemin.get(i);
+            String keyPath = chemin[0].getId() + "->" + chemin[1].getId();
+
+            HashMap<String, HashMap<String, HashMap<String, Integer>>> routeurMap = new HashMap<>();
+
+            for (Node n : routeurs)
+            {
+                String routeurKey = n.getId();
+
+                HashMap<String, HashMap<String, Integer>> hashINOUT = new HashMap<>();
+
+                String in = "IN";
+                String out = "OUT";
+
+                HashMap<String, Integer> mapIN  = new HashMap<>();
+                HashMap<String, Integer> mapOUT = new HashMap<>();
+
+                mapIN.put("PORT", 0);
+                mapIN.put("VCI" , 0);
+
+                mapOUT.put("PORT", 0);
+                mapOUT.put("VCI" , 0);
+
+                hashINOUT.put( in, mapIN);
+                hashINOUT.put(out, mapOUT);
+
+                routeurMap.put(routeurKey, hashINOUT);
+            }
+
+            tableVCI.put(keyPath, routeurMap);
         }
+
+        for (String chemin : tableVCI.keySet() )
+        {
+            String[] che      = chemin.split("->");
+            Iterable<Node> it = this.getCheminParNode(che[0], che[1]);
+
+            ArrayList<Node> listNode = new ArrayList<>();
+
+            for (Node p : it) listNode.add(p);
+
+
+            HashMap<String, HashMap<String, HashMap<String, Integer>>> routeurMap = tableVCI.get(chemin);
+
+            Node avant = null;
+            for (int cpt = 0; cpt < listNode.size(); cpt++ )
+            {
+                if( listNode.get(cpt).getId().contains("PC") )
+                {
+                    if( avant != null )
+                        continue;
+                }
+                else // c'est un routeur
+                {
+                    HashMap<String, HashMap<String, Integer>> hashINOUT = routeurMap.get(listNode.get(cpt).getId());
+
+                    if( avant != null )
+                    {
+                        HashMap<String, Integer> hashIN = hashINOUT.get("IN");
+
+                        ArrayList<Node> list = listNode.get(cpt).neighborNodes().collect(Collectors.toCollection(ArrayList::new));
+
+                        int port = list.indexOf(avant);
+                        int vci  = this.getMaxVCIForNodeAndPort(listNode.get(cpt), true, port, tableVCI) + 1;
+
+                        hashIN.replace("PORT", port);
+                        hashIN.replace("VCI", vci);
+                    }
+
+                    if( cpt < listNode.size()-1 ) // il y as un apres
+                    {
+                        HashMap<String, Integer> hashIN = hashINOUT.get("OUT");
+
+                        ArrayList<Node> list = listNode.get(cpt).neighborNodes().collect(Collectors.toCollection(ArrayList::new));
+
+                        int port = list.indexOf(list.get(cpt+1));
+                        int vci  = this.getMaxVCIForNodeAndPort(listNode.get(cpt), false, port, tableVCI) + 1;
+
+                        hashIN.replace("PORT", port);
+                        hashIN.replace("VCI", vci);
+                    }
+                }
+
+                avant = listNode.get(cpt);
+            }
+        }
+
+        return tableVCI;
+    }
+
+    private int getMaxVCIForNodeAndPort( Node node, boolean bIn, int port, HashMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> tableVCI)
+    {
+        int max = 0;
+
+        for (String key : tableVCI.keySet())
+        {
+            HashMap<String, HashMap<String, Integer>> routeur = tableVCI.get(key).get(node.getId());
+
+            HashMap<String, Integer> PortVCI = routeur.get(bIn ? "IN" : "OUT" );
+
+            if( PortVCI.get("PORT") == port )
+            {
+                if( PortVCI.get("VCI") > max )
+                    max = PortVCI.get("VCI");
+            }
+        }
+
+        return max;
     }
 
     public void resetVCI()
