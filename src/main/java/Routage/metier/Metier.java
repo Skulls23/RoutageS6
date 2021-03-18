@@ -294,12 +294,25 @@ public class Metier
                 routeurMap.put(routeurKey, hashINOUT);
             }
 
+            int numero = 0;
+            do
+            {
+                numero++;
+            }
+            while (tableVCI.containsKey(keyPath + " " + numero));
+
+            keyPath += " " + numero;
+
             tableVCI.put(keyPath, routeurMap);
         }
 
         for (String chemin : tableVCI.keySet() )
         {
             String[] che      = chemin.split("->");
+
+            if( che[1].contains(" ") )
+                che[1] = che[1].substring(0, che[1].length()-2).trim();
+
             Iterable<Node> it = this.getCheminParNode(che[0], che[1]);
 
             ArrayList<Node> listNode = new ArrayList<>();
