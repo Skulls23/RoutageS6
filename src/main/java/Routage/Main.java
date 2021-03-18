@@ -6,7 +6,6 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import javax.swing.*;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 public class Main
@@ -50,7 +49,7 @@ public class Main
         }
         //Metier.getPlusCourtCheminGraphique(graph, "A", "F");
 
-        this.metier = new Metier(this, graph);
+        this.metier = new Metier(graph);
         this.ihm    = new IHMGUI(this, graph);
     }
 
