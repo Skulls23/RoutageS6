@@ -80,6 +80,7 @@ public class IHMGUI extends JFrame
         this.supprimerEdge.addActionListener(e -> new DialogSupprimer(this.theGraph, false));
 
         this.afficherTableVCI = new JButton("Afficher VCI");
+        this.afficherTableVCI.addActionListener(e -> new DialogAjoutVCI(this));
 
         JPanel panelTMP = new JPanel();
         panelTMP.setLayout(new BoxLayout(panelTMP, BoxLayout.Y_AXIS));
@@ -136,5 +137,23 @@ public class IHMGUI extends JFrame
         }
 
         return max;
+    }
+
+    public int getNodeCount()
+    {
+        return this.ctrl.getNodeCount();
+    }
+
+    public Node getNode(int i)
+    {
+        return this.ctrl.getNode(i);
+    }
+
+    public void showAndSetVCI(String dep, String arr)
+    {
+        this.panelTableVCI.init(this.ctrl.getVCI(new Node[]{this.theGraph.getNode(dep), this.theGraph.getNode(arr)}));
+
+        if( !this.panelTableVCI.isVisible() )
+            this.panelTableVCI.setVisible(true);
     }
 }
