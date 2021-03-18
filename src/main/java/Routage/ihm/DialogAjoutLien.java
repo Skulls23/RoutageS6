@@ -64,7 +64,7 @@ public class DialogAjoutLien extends JDialog
             {
                 edge.setAttribute("length", cout);
                 edge.setAttribute("label", edge.getAttribute("length"));
-                edge.setAttribute("ui.style", "text-background-mode: plain; text-background-color: white;text-size: 15;");
+                edge.setAttribute("ui.style", EnumCSS.STYLE_EDGE.getS());
             }
 
             this.setVisible(false);

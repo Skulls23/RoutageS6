@@ -1,10 +1,11 @@
 package Routage.ihm;
 
 import Routage.Main;
-import Routage.metier.Metier;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -37,6 +38,7 @@ public class DialogCalculChemin extends JDialog
 
         this.ok.addActionListener(event ->
         {
+            this.ctrl.reinitialiserCouleurs();
             String dep = this.depart.getSelectedItem()      == null ? "" : this.depart.getSelectedItem().toString();
             String des = this.destination.getSelectedItem() == null ? "" : this.destination.getSelectedItem().toString();
 
@@ -47,6 +49,16 @@ public class DialogCalculChemin extends JDialog
             }
 
             this.ctrl.getPlusCourtCheminTextuelEtGraphique(dep, des);
+        });
+
+        //Reset des couleurs avant la fermeture
+        this.addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                ctrl.reinitialiserCouleurs();
+            }
         });
 
         JPanel list = new JPanel();

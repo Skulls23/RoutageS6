@@ -1,5 +1,6 @@
 package Routage.metier;
 
+import Routage.ihm.EnumCSS;
 import org.graphstream.algorithm.Dijkstra;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
@@ -48,8 +49,6 @@ public class Metier
      */
     public void getPlusCourtCheminGraphique(String pointDebut, String pointFin)
     {
-        this.reinitialiserCouleurs();
-
         Dijkstra dijkstra = this.setupDijkstra(pointDebut);
 
         for (Node node : dijkstra.getPathNodes(this.graph.getNode(pointFin)))
@@ -65,10 +64,10 @@ public class Metier
     public void reinitialiserCouleurs()
     {
         for (int i = 0; i < this.graph.getNodeCount(); i++)
-            this.graph.getNode(i).setAttribute("ui.style", "fill-color: black;");
+            this.graph.getNode(i).setAttribute("ui.style", EnumCSS.STYLE_ROUTEUR.getS());
 
         for (int i = 0; i < this.graph.getEdgeCount(); i++)
-            this.graph.getEdge(i).setAttribute("ui.style", "fill-color: black;");
+            this.graph.getEdge(i).setAttribute("ui.style", EnumCSS.STYLE_EDGE.getS());
     }
 
     /**
@@ -181,27 +180,11 @@ public class Metier
                 Edge e = ((Edge) o);
                 graphTemp.addEdge(e.getId(), e.getNode0(), e.getNode1());
                 graphTemp.getEdge(e.getId()).setAttribute("length", e.getAttribute("length"));
-                graphTemp.getEdge(e.getId()).setAttribute("label", e.getAttribute("label"));
-                graphTemp.getEdge(e.getId()).setAttribute("ui.style", e.getAttribute("ui.style"));
             }
         });
 
         //System.out.println(ret.toString());
         return hashSite;
-    }
-
-    /**
-     * Permet de definir le point de depart de l'algorithme de Dijkstra
-     * @param pointDebut Le Node de départ
-     * @return l'objet qui pourra executer l'algorithme de Dijkstra
-     */
-    private Dijkstra setupDijkstra(String pointDebut)
-    {
-        Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "length");
-        dijkstra.init(graph);
-        dijkstra.setSource(graph.getNode(pointDebut));
-        dijkstra.compute();
-        return dijkstra;
     }
 
     /**
@@ -221,6 +204,20 @@ public class Metier
             graphTemp.getEdge(i).setAttribute("length"  , graph.getEdge(i).getAttribute("length"));
         }
         return graphTemp;
+    }
+
+    /**
+     * Permet de definir le point de depart de l'algorithme de Dijkstra
+     * @param pointDebut Le Node de départ
+     * @return l'objet qui pourra executer l'algorithme de Dijkstra
+     */
+    private Dijkstra setupDijkstra(String pointDebut)
+    {
+        Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "length");
+        dijkstra.init(graph);
+        dijkstra.setSource(graph.getNode(pointDebut));
+        dijkstra.compute();
+        return dijkstra;
     }
 
     /**

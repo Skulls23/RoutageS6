@@ -51,7 +51,7 @@ public class IHMGUI extends JFrame
 
             Node n = this.theGraph.addNode("PC" + num);
             n.setAttribute("label", "PC" + num);
-            n.setAttribute("ui.style", "text-background-mode: plain; text-background-color: white;text-alignment: under;text-size: 15;");
+            n.setAttribute("ui.style", EnumCSS.STYLE_PC.getS());
         });
 
         this.ajoutRouteur = new JButton("Ajouter un routeur");
@@ -61,7 +61,7 @@ public class IHMGUI extends JFrame
 
             Node n = this.theGraph.addNode("RO" + num);
             n.setAttribute("label", "RO" + num);
-            n.setAttribute("ui.style", "text-background-mode: plain; text-background-color: white;text-alignment: under;text-size: 15;");
+            n.setAttribute("ui.style", EnumCSS.STYLE_ROUTEUR.getS());
         });
 
         this.ajoutLien = new JButton("Ajout un lien");
