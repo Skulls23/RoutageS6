@@ -80,14 +80,16 @@ public class Metier
             dijkstra.setSource(pointDebut);
             dijkstra.compute();
 
-            Object[] tabVoisin = pointDebut.neighborNodes().toArray();
+            Object[] tabVoisin          = pointDebut.neighborNodes().toArray();
+            Object[] tabEdgeVoisin      = pointDebut.edges().toArray();
             double[] tabPoidsVersVoisin = new double[tabVoisin.length];
-            //on definit ses voisins
+            //on definit ses voisins et on les enleve pour les remettre plus tard
             for (int k = 0; k < tabVoisin.length; k++)
             {
                 Edge e = pointDebut.getEdge(k);
 
                 tabPoidsVersVoisin[k] = e.getAttribute("length") == null ? Double.NEGATIVE_INFINITY : (double) e.getAttribute("length");
+                //graph.removeEdge((Edge)tabEdgeVoisin[k]);
             }
 
             TreeMap<String, TreeMap<String, Double>> listAllDest = new TreeMap<>();
@@ -139,6 +141,9 @@ public class Metier
             });
 
             hashSite.put(pointDebut.getId(), listAllDest);
+            /*for (int k = 0; k < tabVoisin.length; k++)
+                graph.addEdge(((Edge)tabEdgeVoisin[k]).getId(), ((Edge)tabEdgeVoisin[k]).getNode0(), ((Edge)tabEdgeVoisin[k]).getNode1());*/
+
         });
 
         //System.out.println(ret.toString());
@@ -153,6 +158,12 @@ public class Metier
         dijkstra.setSource(graph.getNode(pointDebut));
         dijkstra.compute();
         return dijkstra;
+    }
+
+    private Iterable getCheminParNode(String pointDebut, String pointFin)
+    {
+        Dijkstra dijkstra = setupDijkstra(pointDebut);
+        return dijkstra.getAllPaths(graph.getNode(pointFin));
     }
 
     public void getVCI( Node[] cheminEnPlus )
