@@ -259,7 +259,8 @@ public class Metier
          */
         TreeMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> tableVCI = new TreeMap<>();
 
-        this.listchemin.add(cheminEnPlus);
+        if( cheminEnPlus != null && cheminEnPlus[0] != null && cheminEnPlus[1] != null )
+            this.listchemin.add(cheminEnPlus);
 
         int nb = 0;
         for (Node[] chemin : this.listchemin)
@@ -396,6 +397,15 @@ public class Metier
 
     public void remove( Node[] chemin )
     {
-        this.listchemin.remove(chemin);
+        for (int i = 0; i < this.listchemin.size(); i++)
+        {
+            Node[] tab = this.listchemin.get(i);
+
+            if( tab[0].getId().equals(chemin[0].getId()) && tab[1].getId().equals(chemin[1].getId()) )
+            {
+                this.listchemin.remove(tab);
+                break;
+            }
+        }
     }
 }

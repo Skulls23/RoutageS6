@@ -18,11 +18,18 @@ public class IHMGUI extends JFrame
     private final JButton ajoutPC;
     private final JButton ajoutRouteur;
     private final JButton ajoutLien;
-    private final JButton afficherTableRoutage;
-    private final JButton afficherTableVCI;
-    private final JButton calculChemin;
     private final JButton supprimerNode;
     private final JButton supprimerEdge;
+
+    private final JButton calculChemin;
+    private final JButton calculRoutage;
+    private final JButton calculVCI;
+
+    private final JButton resetVCI;
+    private final JButton removeFromVCI;
+
+    private final JButton afficherTableRoutage;
+    private final JButton afficherTableVCI;
 
     private final PanelTableRoutage panelRoutage;
     private final PanelTableVCI     panelTableVCI;
@@ -35,7 +42,7 @@ public class IHMGUI extends JFrame
         this.add(new PanelGraphViewer(graph), BorderLayout.CENTER);
 
         this.panelRoutage  = new PanelTableRoutage();
-        this.panelTableVCI = new PanelTableVCI();
+        this.panelTableVCI = new PanelTableVCI(this.theGraph);
 
         JPanel panelTmp = new JPanel(new BorderLayout());
 
@@ -68,7 +75,20 @@ public class IHMGUI extends JFrame
         this.ajoutLien.addActionListener(event -> new DialogAjoutLien(this.theGraph));
 
         this.afficherTableRoutage = new JButton("Afficher la table de routage");
-        this.afficherTableRoutage.addActionListener(event -> this.panelRoutage.setHashMapSites(this.ctrl.getTableRoutage()));
+        this.afficherTableRoutage.addActionListener(event ->
+        {
+            if( !this.panelRoutage.isVisible() )
+            {
+                this.afficherTableRoutage.setText("cacher table de routage");
+
+                this.panelRoutage.setVisible(true);
+            }
+            else
+            {
+                this.panelRoutage.setVisible(false);
+                this.afficherTableRoutage.setText("Afficher la table de routage");
+            }
+        });
 
         this.calculChemin = new JButton("Calcul chemin");
         this.calculChemin.addActionListener(event -> new DialogCalculChemin(this.ctrl));
@@ -80,23 +100,62 @@ public class IHMGUI extends JFrame
         this.supprimerEdge.addActionListener(e -> new DialogSupprimer(this.theGraph, false));
 
         this.afficherTableVCI = new JButton("Afficher VCI");
-        this.afficherTableVCI.addActionListener(e -> new DialogAjoutVCI(this));
+        this.afficherTableVCI.addActionListener(e ->
+        {
+            if( !this.panelTableVCI.isVisible() )
+            {
+                this.afficherTableVCI.setText("cacher table VCI");
+
+                this.panelTableVCI.setVisible(true);
+            }
+            else
+            {
+                this.panelTableVCI.setVisible(false);
+                this.afficherTableVCI.setText("Afficher table VCI");
+            }
+        });
+
+        this.calculRoutage = new JButton("Faire table Routage");
+        this.calculRoutage.addActionListener(e -> this.panelRoutage.setHashMapSites(this.ctrl.getTableRoutage()));
+
+        this.calculVCI = new JButton("calculer/Ajouter VCI");
+        this.calculVCI.addActionListener(e -> new DialogAjoutVCI(this));
+
+        this.resetVCI = new JButton("reset VCI");
+        this.resetVCI.addActionListener(e ->
+        {
+            this.ctrl.resetVCI();
+            this.panelTableVCI.init(this.ctrl.getVCI(null));
+        });
+
+        this.removeFromVCI = new JButton("remove from VCI");
+        this.removeFromVCI.addActionListener(e -> new DialogRemoveVCI(this));
 
         JPanel panelTMP = new JPanel();
         panelTMP.setLayout(new BoxLayout(panelTMP, BoxLayout.Y_AXIS));
 
+        panelTMP.add(new JLabel("Modof. Graph: "));
         panelTMP.add(this.ajoutPC);
         panelTMP.add(this.ajoutRouteur);
         panelTMP.add(this.ajoutLien);
-        panelTMP.add(this.calculChemin);
         panelTMP.add(this.supprimerNode);
         panelTMP.add(this.supprimerEdge);
+
+        panelTMP.add(new JLabel("Calcules: "));
+        panelTMP.add(this.calculChemin);
+        panelTMP.add(this.calculRoutage);
+        panelTMP.add(this.calculVCI);
+
+        panelTMP.add(new JLabel("Modif VCI:"));
+        panelTMP.add(this.removeFromVCI);
+        panelTMP.add(this.resetVCI);
 
         JPanel panelDroite = new JPanel(new BorderLayout());
 
         JPanel panelSouthDroite = new JPanel();
         panelSouthDroite.setLayout(new BoxLayout(panelSouthDroite, BoxLayout.Y_AXIS));
 
+        panelSouthDroite.add(new JLabel("Affichage: "));
         panelSouthDroite.add(this.afficherTableRoutage);
         panelSouthDroite.add(this.afficherTableVCI);
 
@@ -104,6 +163,9 @@ public class IHMGUI extends JFrame
         panelDroite.add(panelSouthDroite, BorderLayout.SOUTH);
 
         this.add(panelDroite, BorderLayout.EAST);
+
+        this.panelTableVCI.setVisible(false);
+        this.panelRoutage.setVisible(false);
 
         this.pack();
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -152,8 +214,12 @@ public class IHMGUI extends JFrame
     public void showAndSetVCI(String dep, String arr)
     {
         this.panelTableVCI.init(this.ctrl.getVCI(new Node[]{this.theGraph.getNode(dep), this.theGraph.getNode(arr)}));
+    }
 
-        if( !this.panelTableVCI.isVisible() )
-            this.panelTableVCI.setVisible(true);
+    public void removeVCI(String dep, String des)
+    {
+        this.ctrl.removeVCI(new Node[]{this.theGraph.getNode(dep), this.theGraph.getNode(des)});
+
+        this.panelTableVCI.init(this.ctrl.getVCI(null));
     }
 }

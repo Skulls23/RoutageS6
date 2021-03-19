@@ -1,19 +1,22 @@
 package Routage.ihm.panels;
 
+import org.graphstream.graph.implementations.SingleGraph;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 public class PanelTableVCI extends JScrollPane
 {
     private final JPanel panelPose;
+    private final SingleGraph graph;
 
-    public PanelTableVCI()
+    public PanelTableVCI(SingleGraph graph)
     {
         super(new JPanel(new BorderLayout()));
+
+        this.graph = graph;
 
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -33,7 +36,16 @@ public class PanelTableVCI extends JScrollPane
         JPanel panelFirstGrid  = new JPanel(new GridLayout(tableVCI.size()+3, 1));
         JPanel panelGaucheGrid = new JPanel(new GridLayout(tableVCI.size()+3, 1));
 
-        Set<String> routeurs = tableVCI.get(tableVCI.keySet().toArray(new String[0])[0]).keySet();
+        TreeSet<String> routeurs = tableVCI.size() > 0 ? new TreeSet<>(tableVCI.get(tableVCI.keySet().toArray(new String[0])[0]).keySet()) : new TreeSet<>();
+
+        if( routeurs.size() == 0 )
+        {
+            this.graph.forEach(node ->
+            {
+                if( node.getId().contains("RO") )
+                    routeurs.add(node.getId());
+            });
+        }
 
         JPanel panelGridHaut = new JPanel(new GridLayout(1, routeurs.size()));
 
@@ -71,6 +83,7 @@ public class PanelTableVCI extends JScrollPane
 
         panelFirstGrid.add(panelPORTVCI);
 
+        if( tableVCI.keySet().size() > 0 )
         for (String chemin : tableVCI.keySet())
         {
             JPanel panelGrid = new JPanel(new GridLayout(1, tableVCI.get(chemin).size()*2*2));
@@ -81,7 +94,7 @@ public class PanelTableVCI extends JScrollPane
 
             HashMap<String, HashMap<String, HashMap<String, Integer>>> routeursMap = tableVCI.get(chemin);
 
-            for (String routeur : routeursMap.keySet())
+            for (String routeur : routeurs)
             {
                 HashMap<String, HashMap<String, Integer>> INOUT = routeursMap.get(routeur);
 
