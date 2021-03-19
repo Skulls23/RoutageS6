@@ -99,4 +99,14 @@ public class Main
     {
         this.metier.reinitialiserCouleurs();
     }
+
+    public void resetVCI()
+    {
+        this.metier.resetVCI();
+    }
+
+    public void removeVCI(Node[] nodes)
+    {
+        this.metier.remove(nodes);
+    }
 }
