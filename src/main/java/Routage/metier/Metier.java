@@ -64,7 +64,10 @@ public class Metier
     public void reinitialiserCouleurs()
     {
         for (int i = 0; i < this.graph.getNodeCount(); i++)
-            this.graph.getNode(i).setAttribute("ui.style", EnumCSS.STYLE_ROUTEUR.getS());
+            if(this.graph.getNode(i).getAttribute("label").toString().contains("PC"))
+                this.graph.getNode(i).setAttribute("ui.style", EnumCSS.STYLE_PC.getS());
+            else
+                this.graph.getNode(i).setAttribute("ui.style", EnumCSS.STYLE_ROUTEUR.getS());
 
         for (int i = 0; i < this.graph.getEdgeCount(); i++)
             this.graph.getEdge(i).setAttribute("ui.style", EnumCSS.STYLE_EDGE.getS());
