@@ -18,6 +18,7 @@ public class PanelGraphViewer extends JPanel
         viewer.enableAutoLayout();
 
         ViewPanel viewPanel = (ViewPanel) viewer.addDefaultView(false);
+
         this.add(viewPanel);
     }
 

@@ -1,4 +1,6 @@
-package Routage.ihm;
+package Routage.ihm.dialog;
+
+import Routage.ihm.IHMGUI;
 
 import javax.swing.*;
 import java.awt.*;

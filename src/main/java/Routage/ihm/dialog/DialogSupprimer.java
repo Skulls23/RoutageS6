@@ -1,4 +1,4 @@
-package Routage.ihm;
+package Routage.ihm.dialog;
 
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;

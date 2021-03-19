@@ -1,34 +1,32 @@
-package Routage.ihm;
+package Routage.ihm.dialog;
 
-import Routage.Main;
+import Routage.ihm.IHMGUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class DialogCalculChemin extends JDialog
+public class DialogAjoutVCI extends JDialog
 {
-    private final Main ctrl;
+    private final IHMGUI ihm;
 
     private final JButton ok;
 
     private final JComboBox<String> destination;
     private final JComboBox<String> depart;
 
-    public DialogCalculChemin(Main ctrl)
+    public DialogAjoutVCI(IHMGUI ctrl)
     {
-        this.ctrl = ctrl;
+        this.ihm = ctrl;
 
-        this.setTitle("Calcule du chemin le plus court");
+        this.setTitle("Ajout d'un VCI puis Affichage");
 
         this.ok = new JButton("valider");
 
         ArrayList<String> allNodeId = new ArrayList<>();
-        for (int i = 0; i < this.ctrl.getNodeCount(); i++)
-            allNodeId.add(this.ctrl.getNode(i).getId());
+        for (int i = 0; i < this.ihm.getNodeCount(); i++)
+            allNodeId.add(this.ihm.getNode(i).getId());
 
         String[] arrays = allNodeId.toArray(new String[0]);
         Arrays.sort(arrays);
@@ -38,7 +36,6 @@ public class DialogCalculChemin extends JDialog
 
         this.ok.addActionListener(event ->
         {
-            this.ctrl.reinitialiserCouleurs();
             String dep = this.depart.getSelectedItem()      == null ? "" : this.depart.getSelectedItem().toString();
             String des = this.destination.getSelectedItem() == null ? "" : this.destination.getSelectedItem().toString();
 
@@ -48,17 +45,7 @@ public class DialogCalculChemin extends JDialog
                 return;
             }
 
-            this.ctrl.getPlusCourtCheminTextuelEtGraphique(dep, des);
-        });
-
-        //Reset des couleurs avant la fermeture
-        this.addWindowListener(new WindowAdapter()
-        {
-            @Override
-            public void windowClosing(WindowEvent e)
-            {
-                ctrl.reinitialiserCouleurs();
-            }
+            this.ihm.addVCI(dep, des);
         });
 
         JPanel list = new JPanel();

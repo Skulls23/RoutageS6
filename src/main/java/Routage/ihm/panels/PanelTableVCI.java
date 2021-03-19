@@ -103,7 +103,13 @@ public class PanelTableVCI extends JScrollPane
                     HashMap<String, Integer> PORTVCI = INOUT.get(s);
 
                     for (String ss : PORTVCI.keySet())
-                        panelGrid.add(this.getLabelWithBorder(String.valueOf(PORTVCI.get(ss)), Color.BLACK));
+                    {
+                        int val = PORTVCI.get(ss);
+
+                        String txt = chemin.contains("-/>") && ss.contains("VCI") ? "-" + val + "-" : String.valueOf(val);
+
+                        panelGrid.add(this.getLabelWithBorder( val == 0 ? "" : txt, Color.BLACK));
+                    }
                 }
             }
 

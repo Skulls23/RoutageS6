@@ -16,7 +16,13 @@ https://javadoc.io/doc/org.graphstream
 public class Metier
 {
     private final SingleGraph graph;
-    private final ArrayList<Node[]> listchemin;
+
+    /**
+     * 0: Node depart
+     * 1: Node destination
+     * 2: Boolean isFermeture
+     */
+    private final ArrayList<Object[]> listchemin;
 
 
     /**
@@ -235,7 +241,7 @@ public class Metier
         return dijkstra.getPathNodes(graph.getNode(pointFin));
     }
 
-    public TreeMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> getVCI( Node[] cheminEnPlus )
+    public TreeMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> getVCI( Object[] cheminEnPlus )
     {
         ArrayList<Node> routeurs = new ArrayList<>();
 
@@ -266,9 +272,9 @@ public class Metier
             this.listchemin.add(cheminEnPlus);
 
         int nb = 0;
-        for (Node[] chemin : this.listchemin)
+        for (Object[] chemin : this.listchemin)
         {
-            String keyPath = chemin[0].getId() + "->" + chemin[1].getId();
+            String keyPath = ((Node)chemin[0]).getId() + ( chemin[2] != null && ((Boolean) chemin[2]) ? "-/>" : "->" ) + ((Node)chemin[1]).getId();
 
             HashMap<String, HashMap<String, HashMap<String, Integer>>> routeurMap = new HashMap<>();
 
@@ -310,7 +316,7 @@ public class Metier
 
         for (String chemin : tableVCI.keySet() )
         {
-            String[] che      = chemin.split("->");
+            String[] che      = chemin.split(chemin.contains("->") ? "->" : "-/>");
 
             if( che[1].contains(" ") )
                 che[1] = che[1].substring(0, che[1].lastIndexOf(" ")).trim();
@@ -330,12 +336,7 @@ public class Metier
             Node avant = null;
             for (int cpt = 0; cpt < listNode.size(); cpt++ )
             {
-                if( listNode.get(cpt).getId().contains("PC") )
-                {
-                    if( avant != null )
-                        continue;
-                }
-                else // c'est un routeur
+                if(listNode.get(cpt).getId().contains("RO")) // c'est un routeur
                 {
                     HashMap<String, HashMap<String, Integer>> hashINOUT = routeurMap.get(listNode.get(cpt).getId());
 
@@ -345,8 +346,8 @@ public class Metier
 
                         ArrayList<Node> list = listNode.get(cpt).neighborNodes().collect(Collectors.toCollection(ArrayList::new));
 
-                        int port = list.indexOf(avant)+1;
-                        int vci  = this.getMaxVCIForNodeAndPort(listNode.get(cpt), false, port, tableVCI) + 1;
+                        int port = list.indexOf(avant) + 1;
+                        int vci  = this.getFirstVCIForNodeAndPort(listNode.get(cpt), false, port, tableVCI) + (chemin.contains("->") ? 1 : 0);
 
                         hashIN.replace("PORT", port);
                         hashIN.replace("VCI", vci);
@@ -359,7 +360,7 @@ public class Metier
                         ArrayList<Node> list = listNode.get(cpt).neighborNodes().collect(Collectors.toCollection(ArrayList::new));
 
                         int port = list.indexOf(listNode.get(cpt+1))+1;
-                        int vci  = this.getMaxVCIForNodeAndPort(listNode.get(cpt), true, port, tableVCI) + 1;
+                        int vci  = this.getFirstVCIForNodeAndPort(listNode.get(cpt), true, port, tableVCI) + (chemin.contains("->") ? 1 : 0);
 
                         hashOut.replace("PORT", port);
                         hashOut.replace("VCI", vci);
@@ -373,9 +374,9 @@ public class Metier
         return tableVCI;
     }
 
-    private int getMaxVCIForNodeAndPort( Node node, boolean bIn, int port, TreeMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> tableVCI)
+    private int getFirstVCIForNodeAndPort(Node node, boolean bIn, int port, TreeMap<String, HashMap<String, HashMap<String, HashMap<String, Integer>>>> tableVCI)
     {
-        int max = 0;
+        ArrayList<Integer> listVCI = new ArrayList<>();
 
         for (String key : tableVCI.keySet())
         {
@@ -384,13 +385,18 @@ public class Metier
             HashMap<String, Integer> PortVCI = routeur.get(bIn ? "IN" : "OUT" );
 
             if( PortVCI.get("PORT") == port )
-            {
-                if( PortVCI.get("VCI") > max )
-                    max = PortVCI.get("VCI");
-            }
+                if( key.contains("->"))
+                    listVCI.add(PortVCI.get("VCI"));
+                else if( listVCI.contains(PortVCI.get("VCI")))
+                    listVCI.remove((Object) PortVCI.get("VCI")); // Type Object neccessaire pour pas appeler remove(index)
         }
 
-        return max;
+        int cpt = 0;
+
+        while (listVCI.contains(cpt+1)) // VCI commence a 1
+            cpt++;
+
+        return cpt;
     }
 
     public void resetVCI()
@@ -402,9 +408,9 @@ public class Metier
     {
         for (int i = 0; i < this.listchemin.size(); i++)
         {
-            Node[] tab = this.listchemin.get(i);
+            Object[] tab = this.listchemin.get(i);
 
-            if( tab[0].getId().equals(chemin[0].getId()) && tab[1].getId().equals(chemin[1].getId()) )
+            if( ((Node)tab[0]).getId().equals(chemin[0].getId()) && ((Node)tab[1]).getId().equals(chemin[1].getId()) )
             {
                 this.listchemin.remove(tab);
                 break;

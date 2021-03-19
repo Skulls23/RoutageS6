@@ -1,6 +1,7 @@
 package Routage.ihm;
 
 import Routage.Main;
+import Routage.ihm.dialog.*;
 import Routage.ihm.panels.PanelTableRoutage;
 import Routage.ihm.panels.PanelGraphViewer;
 import Routage.ihm.panels.PanelTableVCI;
@@ -27,6 +28,7 @@ public class IHMGUI extends JFrame
 
     private final JButton resetVCI;
     private final JButton removeFromVCI;
+    private final JButton fermetureVCI;
 
     private final JButton afficherTableRoutage;
     private final JButton afficherTableVCI;
@@ -121,6 +123,9 @@ public class IHMGUI extends JFrame
         this.calculVCI = new JButton("calculer/Ajouter VCI");
         this.calculVCI.addActionListener(e -> new DialogAjoutVCI(this));
 
+        this.fermetureVCI = new JButton("fermeture VCI");
+        this.fermetureVCI.addActionListener(e -> new DialogFermetureVCI(this));
+
         this.resetVCI = new JButton("reset VCI");
         this.resetVCI.addActionListener(e ->
         {
@@ -149,6 +154,7 @@ public class IHMGUI extends JFrame
         panelTMP.add(new JLabel("Modif VCI:"));
         panelTMP.add(this.removeFromVCI);
         panelTMP.add(this.resetVCI);
+        panelTMP.add(this.fermetureVCI);
 
         JPanel panelDroite = new JPanel(new BorderLayout());
 
@@ -211,9 +217,9 @@ public class IHMGUI extends JFrame
         return this.ctrl.getNode(i);
     }
 
-    public void showAndSetVCI(String dep, String arr)
+    public void addVCI(String dep, String arr)
     {
-        this.panelTableVCI.init(this.ctrl.getVCI(new Node[]{this.theGraph.getNode(dep), this.theGraph.getNode(arr)}));
+        this.panelTableVCI.init(this.ctrl.getVCI(new Object[]{this.theGraph.getNode(dep), this.theGraph.getNode(arr), Boolean.FALSE}));
     }
 
     public void removeVCI(String dep, String des)
@@ -221,5 +227,10 @@ public class IHMGUI extends JFrame
         this.ctrl.removeVCI(new Node[]{this.theGraph.getNode(dep), this.theGraph.getNode(des)});
 
         this.panelTableVCI.init(this.ctrl.getVCI(null));
+    }
+
+    public void closeVCI(String dep, String des)
+    {
+        this.panelTableVCI.init(this.ctrl.getVCI(new Object[]{this.theGraph.getNode(dep), this.theGraph.getNode(des), Boolean.TRUE}));
     }
 }

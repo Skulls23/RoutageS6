@@ -1,5 +1,6 @@
-package Routage.ihm;
+package Routage.ihm.dialog;
 
+import Routage.ihm.EnumCSS;
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.implementations.SingleGraph;
 
@@ -62,10 +63,11 @@ public class DialogAjoutLien extends JDialog
 
             if( cout > 0 )
             {
-                edge.setAttribute("length", cout);
                 edge.setAttribute("label", edge.getAttribute("length"));
                 edge.setAttribute("ui.style", EnumCSS.STYLE_EDGE.getS());
             }
+
+            edge.setAttribute("length", cout);
 
             this.setVisible(false);
         });
