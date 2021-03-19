@@ -142,7 +142,7 @@ public class IHMGUI extends JFrame
         this.replaceGraph = new JButton("Refresh graph");
         this.replaceGraph.addActionListener(e -> graphView.refreshGraph());
 
-        this.removeFromVCI = new JButton("Retiré du VCI");
+        this.removeFromVCI = new JButton("Retirer du VCI");
         this.removeFromVCI.addActionListener(e -> new DialogRemoveVCI(this));
 
         JPanel panelTMP = new JPanel();
@@ -183,7 +183,7 @@ public class IHMGUI extends JFrame
         this.panelTableVCI.setVisible(false);
         this.panelRoutage.setVisible(false);
 
-        this.pack();
+        this.setSize(1250, 750);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);

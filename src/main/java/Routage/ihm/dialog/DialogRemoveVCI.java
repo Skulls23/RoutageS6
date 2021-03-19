@@ -20,7 +20,7 @@ public class DialogRemoveVCI extends JDialog
     {
         this.ihm = ctrl;
 
-        this.setTitle("Ajout d'un VCI puis Affichage");
+        this.setTitle("Suppression d'un VCI puis Affichage");
 
         this.ok = new JButton("valider");
 

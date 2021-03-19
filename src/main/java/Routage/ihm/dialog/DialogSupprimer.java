@@ -23,6 +23,8 @@ public class DialogSupprimer extends JDialog
     {
         this.graph = graph;
 
+        this.setTitle("Supression");
+
         ArrayList<String> allNodeId = new ArrayList<>();
         for (int i = 0; i < graph.getNodeCount(); i++)
             allNodeId.add(graph.getNode(i).getId());

@@ -20,7 +20,7 @@ public class DialogFermetureVCI extends JDialog
     {
         this.ihm = ctrl;
 
-        this.setTitle("Ajout d'un VCI puis Affichage");
+        this.setTitle("Fermeture d'un VCI puis Affichage");
 
         this.ok = new JButton("valider");
 
