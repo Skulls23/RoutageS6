@@ -21,19 +21,19 @@ public class Main
     {
         this.graph = new SingleGraph("Graph1");
 
-        graph.addNode("RO1");
-        graph.addNode("RO2");
-        graph.addNode("RO3");
-        graph.addNode("RO4");
-        graph.addNode("RO5");
-        graph.addNode("RO6");
-        graph.addEdge("RO1RO2", "RO1", "RO2").setAttribute("length", 2.0);
-        graph.addEdge("RO2RO3", "RO2", "RO3").setAttribute("length", 3.0);
-        graph.addEdge("RO3RO6", "RO3", "RO6").setAttribute("length", 40.0);
-        graph.addEdge("RO1RO5", "RO1", "RO5").setAttribute("length", 7.0);
-        graph.addEdge("RO5RO6", "RO5", "RO6").setAttribute("length", 1.0);
-        graph.addEdge("RO5RO3", "RO5", "RO3").setAttribute("length", 3.0);
-        graph.addEdge("RO5RO4", "RO5", "RO4").setAttribute("length", 1.0);
+        graph.addNode("RO01");
+        graph.addNode("RO02");
+        graph.addNode("RO03");
+        graph.addNode("RO04");
+        graph.addNode("RO05");
+        graph.addNode("RO06");
+        graph.addEdge("RO01RO02", "RO01", "RO02").setAttribute("length", 2.0);
+        graph.addEdge("RO02RO03", "RO02", "RO03").setAttribute("length", 3.0);
+        graph.addEdge("RO03RO06", "RO03", "RO06").setAttribute("length", 40.0);
+        graph.addEdge("RO01RO05", "RO01", "RO05").setAttribute("length", 7.0);
+        graph.addEdge("RO05RO06", "RO05", "RO06").setAttribute("length", 1.0);
+        graph.addEdge("RO05RO03", "RO05", "RO03").setAttribute("length", 3.0);
+        graph.addEdge("RO05RO04", "RO05", "RO04").setAttribute("length", 1.0);
 
 
         for(int i=0; i<graph.getEdgeCount(); i++)

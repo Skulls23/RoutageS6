@@ -79,10 +79,16 @@ public class DialogAjoutLien extends JDialog
             {
                 char key = e.getKeyChar();
 
-                if( !Character.isDigit(key) )
+                if( !Character.isDigit(key) && key != '.' )
                 {
                     if( key != KeyEvent.VK_BACK_SPACE )
                         Toolkit.getDefaultToolkit().beep();
+
+                    e.consume();
+                }
+                else if( key == '.' && cout.getText().contains(String.valueOf(key)))
+                {
+                    Toolkit.getDefaultToolkit().beep();
 
                     e.consume();
                 }

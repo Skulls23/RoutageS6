@@ -33,6 +33,8 @@ public class IHMGUI extends JFrame
     private final JButton afficherTableRoutage;
     private final JButton afficherTableVCI;
 
+    private final JButton replaceGraph;
+
     private final PanelTableRoutage panelRoutage;
     private final PanelTableVCI     panelTableVCI;
 
@@ -41,7 +43,9 @@ public class IHMGUI extends JFrame
         this.ctrl     = ctrl;
         this.theGraph = graph;
 
-        this.add(new PanelGraphViewer(graph), BorderLayout.CENTER);
+        PanelGraphViewer graphView = new PanelGraphViewer(graph);
+
+        this.add(graphView, BorderLayout.CENTER);
 
         this.panelRoutage  = new PanelTableRoutage();
         this.panelTableVCI = new PanelTableVCI(this.theGraph);
@@ -58,8 +62,8 @@ public class IHMGUI extends JFrame
         {
             int num = this.getNodeCountFor(true) + 1;
 
-            Node n = this.theGraph.addNode("PC" + num);
-            n.setAttribute("label", "PC" + num);
+            Node n = this.theGraph.addNode("PC" + String.format("%02d", num));
+            n.setAttribute("label", "PC" + String.format("%02d", num));
             n.setAttribute("ui.style", EnumCSS.STYLE_PC.getS());
         });
 
@@ -68,8 +72,8 @@ public class IHMGUI extends JFrame
         {
             int num = this.getNodeCountFor(false) + 1;
 
-            Node n = this.theGraph.addNode("RO" + num);
-            n.setAttribute("label", "RO" + num);
+            Node n = this.theGraph.addNode("RO" + String.format("%02d", num));
+            n.setAttribute("label", "RO" + String.format("%02d", num));
             n.setAttribute("ui.style", EnumCSS.STYLE_ROUTEUR.getS());
         });
 
@@ -126,20 +130,23 @@ public class IHMGUI extends JFrame
         this.fermetureVCI = new JButton("fermeture VCI");
         this.fermetureVCI.addActionListener(e -> new DialogFermetureVCI(this));
 
-        this.resetVCI = new JButton("reset VCI");
+        this.resetVCI = new JButton("réinitialiser VCI");
         this.resetVCI.addActionListener(e ->
         {
             this.ctrl.resetVCI();
             this.panelTableVCI.init(this.ctrl.getVCI(null));
         });
 
-        this.removeFromVCI = new JButton("remove from VCI");
+        this.replaceGraph = new JButton("refresh graph");
+        this.replaceGraph.addActionListener(e -> graphView.refreshGraph());
+
+        this.removeFromVCI = new JButton("retiré du VCI");
         this.removeFromVCI.addActionListener(e -> new DialogRemoveVCI(this));
 
         JPanel panelTMP = new JPanel();
-        panelTMP.setLayout(new BoxLayout(panelTMP, BoxLayout.Y_AXIS));
+        panelTMP.setLayout(new GridLayout(16, 1));
 
-        panelTMP.add(new JLabel("Modof. Graph: "));
+        panelTMP.add(new JLabel("Modif. Graph: "));
         panelTMP.add(this.ajoutPC);
         panelTMP.add(this.ajoutRouteur);
         panelTMP.add(this.ajoutLien);
@@ -155,17 +162,18 @@ public class IHMGUI extends JFrame
         panelTMP.add(this.removeFromVCI);
         panelTMP.add(this.resetVCI);
         panelTMP.add(this.fermetureVCI);
+        panelTMP.add(this.replaceGraph);
 
         JPanel panelDroite = new JPanel(new BorderLayout());
 
         JPanel panelSouthDroite = new JPanel();
-        panelSouthDroite.setLayout(new BoxLayout(panelSouthDroite, BoxLayout.Y_AXIS));
+        panelSouthDroite.setLayout(new GridLayout(3, 1));
 
         panelSouthDroite.add(new JLabel("Affichage: "));
         panelSouthDroite.add(this.afficherTableRoutage);
         panelSouthDroite.add(this.afficherTableVCI);
 
-        panelDroite.add(panelTMP, BorderLayout.CENTER);
+        panelDroite.add(panelTMP, BorderLayout.NORTH);
         panelDroite.add(panelSouthDroite, BorderLayout.SOUTH);
 
         this.add(panelDroite, BorderLayout.EAST);
