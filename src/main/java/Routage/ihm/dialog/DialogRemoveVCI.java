@@ -55,7 +55,7 @@ public class DialogRemoveVCI extends JDialog
         list.add(new JLabel("destination: "));
         list.add(this.destination);
 
-        this.add(new JLabel("supprime la premiere connexion saisie"), BorderLayout.NORTH);
+        this.add(new JLabel("Supprime la premiere connexion saisie"), BorderLayout.NORTH);
         this.add(list);
 
         JPanel panelBtn = new JPanel();
