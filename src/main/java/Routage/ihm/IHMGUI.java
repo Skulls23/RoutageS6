@@ -40,6 +40,8 @@ public class IHMGUI extends JFrame
 
     public IHMGUI( Main ctrl, SingleGraph graph )
     {
+        super("TP4 Boireau/Dubois");
+
         this.ctrl     = ctrl;
         this.theGraph = graph;
 
@@ -85,7 +87,7 @@ public class IHMGUI extends JFrame
         {
             if( !this.panelRoutage.isVisible() )
             {
-                this.afficherTableRoutage.setText("cacher table de routage");
+                this.afficherTableRoutage.setText("Cacher table de routage");
 
                 this.panelRoutage.setVisible(true);
             }
@@ -110,7 +112,7 @@ public class IHMGUI extends JFrame
         {
             if( !this.panelTableVCI.isVisible() )
             {
-                this.afficherTableVCI.setText("cacher table VCI");
+                this.afficherTableVCI.setText("Cacher table VCI");
 
                 this.panelTableVCI.setVisible(true);
             }
@@ -124,23 +126,23 @@ public class IHMGUI extends JFrame
         this.calculRoutage = new JButton("Faire table Routage");
         this.calculRoutage.addActionListener(e -> this.panelRoutage.setHashMapSites(this.ctrl.getTableRoutage()));
 
-        this.calculVCI = new JButton("calculer/Ajouter VCI");
+        this.calculVCI = new JButton("Calculer/Ajouter VCI");
         this.calculVCI.addActionListener(e -> new DialogAjoutVCI(this));
 
-        this.fermetureVCI = new JButton("fermeture VCI");
+        this.fermetureVCI = new JButton("Fermeture VCI");
         this.fermetureVCI.addActionListener(e -> new DialogFermetureVCI(this));
 
-        this.resetVCI = new JButton("réinitialiser VCI");
+        this.resetVCI = new JButton("Réinitialiser VCI");
         this.resetVCI.addActionListener(e ->
         {
             this.ctrl.resetVCI();
             this.panelTableVCI.init(this.ctrl.getVCI(null));
         });
 
-        this.replaceGraph = new JButton("refresh graph");
+        this.replaceGraph = new JButton("Refresh graph");
         this.replaceGraph.addActionListener(e -> graphView.refreshGraph());
 
-        this.removeFromVCI = new JButton("retiré du VCI");
+        this.removeFromVCI = new JButton("Retiré du VCI");
         this.removeFromVCI.addActionListener(e -> new DialogRemoveVCI(this));
 
         JPanel panelTMP = new JPanel();
@@ -153,7 +155,7 @@ public class IHMGUI extends JFrame
         panelTMP.add(this.supprimerNode);
         panelTMP.add(this.supprimerEdge);
 
-        panelTMP.add(new JLabel("Calcules: "));
+        panelTMP.add(new JLabel("Calculs: "));
         panelTMP.add(this.calculChemin);
         panelTMP.add(this.calculRoutage);
         panelTMP.add(this.calculVCI);
